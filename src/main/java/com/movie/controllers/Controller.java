@@ -35,6 +35,9 @@ public class Controller {
         params = new Object[] { "elilevi","elilevi","eli", "levi",0};
         jdbcTemplate.update(inserQuery, params, types);
 
+        params = new Object[] { "tiggermina","tiggermina","tiger", "mina",0};
+        jdbcTemplate.update(inserQuery, params, types);
+
         jdbcTemplate.execute("drop table if exists  movies");
         jdbcTemplate.execute("CREATE TABLE movies(" +
                 "id int NOT NULL AUTO_INCREMENT ,movie_name VARCHAR(255), year int, category int, info VARCHAR(1027) , rating FLOAT ,available int,PRIMARY KEY (id))");
@@ -73,36 +76,37 @@ public class Controller {
                 "successfully conned millions of dollars' worth of checks as a Pan Am pilot, doctor, and legal prosecutor.",8.0,3};
         jdbcTemplate.update(inserQuery, params, types);
 
-    }
-
-    @RequestMapping("/inserttest")
-    public String index() {
-
-//        jdbcTemplate.execute("CREATE TABLE users(" +
-//                "id int NOT NULL AUTO_INCREMENT ,user_name VARCHAR(255), first_name VARCHAR(255), last_name VARCHAR(255),credits int,PRIMARY KEY (id))");
-
-
-        String inserQuery = "INSERT INTO users (user_name, first_name, last_name,credits) VALUES (?, ?, ?,?) ";
-        Object[] params = new Object[] { "lionelmina","Lionel", "mina",0};
-        int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        String statment= "SELECT * FROM users";
-        System.out.println( ""+jdbcTemplate.queryForList(statment));
-
-
-
-
-
-        return "table inserted";
-
-
 
     }
+
+
+
+//    @RequestMapping("/inserttest")
+//    public String index() {
+//
+////        jdbcTemplate.execute("CREATE TABLE users(" +
+////                "id int NOT NULL AUTO_INCREMENT ,user_name VARCHAR(255), first_name VARCHAR(255), last_name VARCHAR(255),credits int,PRIMARY KEY (id))");
+//
+//
+//        String inserQuery = "INSERT INTO users (user_name, first_name, last_name,credits) VALUES (?, ?, ?,?) ";
+//        Object[] params = new Object[] { "lionelmina","Lionel", "mina",0};
+//        int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER};
+//        jdbcTemplate.update(inserQuery, params, types);
+//
+//        String statment= "SELECT * FROM users";
+//        System.out.println( ""+jdbcTemplate.queryForList(statment));
+//
+//        return "table inserted";
+//
+//
+//
+//    }
     //function getMovie()
 //    return array of array {Id of movie,name,png url,year,rating}
     @RequestMapping(value = "/movies", method = RequestMethod.GET)
     public String getMovies(){
+        System.out.println(jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;"));
+
         return "List of all movies";
     }
     //function getRatingComment(movieID) return array of arrays String  {User ID,Commment ,rating} order by Rating
