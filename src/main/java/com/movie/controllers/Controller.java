@@ -73,15 +73,6 @@ public class Controller {
                 "successfully conned millions of dollars' worth of checks as a Pan Am pilot, doctor, and legal prosecutor.",8.0,3};
         jdbcTemplate.update(inserQuery, params, types);
 
-
-
-
-
-
-
-
-
-
     }
 
     @RequestMapping("/inserttest")
