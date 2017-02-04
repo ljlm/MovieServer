@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Types;
+import java.util.List;
+import java.util.Map;
 
 @EnableAutoConfiguration
 @RestController
@@ -106,8 +108,8 @@ public class Controller {
     @RequestMapping(value = "/movies", method = RequestMethod.GET)
     public String getMovies(){
         System.out.println(jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;"));
-
-        return "List of all movies";
+        List<Map<String,Object>> movies =jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;");
+        return movies.toString();
     }
     //function getRatingComment(movieID) return array of arrays String  {User ID,Commment ,rating} order by Rating
     @RequestMapping(value = "/comments/{movieID}", method = RequestMethod.GET)
