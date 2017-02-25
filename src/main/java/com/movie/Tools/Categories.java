@@ -4,6 +4,7 @@ package com.movie.Tools;
  * Created by lionelm on 1/14/2017.
  */
 public class Categories {
+
     public static final int HORROR = 0;
     public static final int CRIME =1;
     public static final int ADVENTURE = 2;

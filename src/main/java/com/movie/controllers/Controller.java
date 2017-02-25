@@ -43,7 +43,7 @@ public class Controller {
 
         jdbcTemplate.execute("drop table if exists  movies");
         jdbcTemplate.execute("CREATE TABLE movies(" +
-                "id int NOT NULL AUTO_INCREMENT ,movie_name VARCHAR(255), year int, category int, info VARCHAR(1027) , rating FLOAT ,available int,PRIMARY KEY (id))");
+                "id int NOT NULL AUTO_INCREMENT ,movie_name VARCHAR(255) , year int, category int, info VARCHAR(1027) , rating FLOAT ,available int,PRIMARY KEY (id))");
         types = new int[] { Types.VARCHAR,Types.INTEGER, Types.INTEGER,Types.VARCHAR , Types.FLOAT ,Types.INTEGER};
         inserQuery = "INSERT INTO movies (movie_name, year, category, info,rating ,available ) VALUES (?, ?, ?, ?,?,?) ";
         params = new Object[] { "City of God",2002, Categories.CRIME,"Two boys growing up in a violent neighborhood" +
@@ -80,8 +80,19 @@ public class Controller {
         jdbcTemplate.update(inserQuery, params, types);
 
 
-    }
+        jdbcTemplate.execute("drop table if exists rating");
 
+//        jdbcTemplate.execute("CREATE TABLE rating(" +
+//                "id int NOT NULL AUTO_INCREMENT, user_id int, movie_id int, rating int ,comment VARCHAR(255),PRIMARY KEY (id)");
+        jdbcTemplate.execute("CREATE TABLE rating(" +
+                "id int NOT NULL AUTO_INCREMENT ,user_id int , movie_id int  , rating int, comment VARCHAR(255),PRIMARY KEY (id))");
+         inserQuery = "INSERT INTO rating (user_id ,movie_id, rating, comment) VALUES (?, ?,?,? ) ";
+         types = new int[] { Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.VARCHAR};
+          params = new Object[] { 1,1 ,8,"City of God is a beautiful movie. I felt like a child."};
+        jdbcTemplate.update(inserQuery, params, types);
+
+
+    }
 
 
 //    @RequestMapping("/inserttest")
@@ -111,8 +122,7 @@ public class Controller {
         System.out.println(jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;"));
         List<Map<String,Object>> movies =jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;");
         List<String> movieList= new ArrayList<>();
-        for (Map<String,Object> movie: movies
-             ) {
+        for (Map<String,Object> movie: movies) {
             String value = (String) movie.get("movie_name");
             movieList.add(value);
 
