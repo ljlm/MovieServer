@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -122,16 +121,8 @@ public class Controller {
     //function getMovie()
 //    return array of array {Id of movie,name,png url,year,rating}
     @RequestMapping(value = "/movies", method = RequestMethod.GET)
-    public String getMovies(){
-        System.out.println(jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;"));
-        List<Map<String,Object>> movies =jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;");
-        List<String> movieList= new ArrayList<>();
-        for (Map<String,Object> movie: movies) {
-            String value = (String) movie.get("movie_name");
-            movieList.add(value);
-
-        }
-        return movieList.toString();
+    public List getMovies(){
+        return dbManager.getMovieList();
     }
 
     @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
@@ -149,6 +140,11 @@ public class Controller {
         return "User rated movie "+movieID+" as "+rating;
     }
 
+//    DBManager.getMovieListByCategory
+    @RequestMapping(value = "/movies/categories/{categoryId}", method = RequestMethod.GET)
+    public List getMoviesByCategory(@PathVariable Integer categoryId){
+        return dbManager.getMovieByCategory(categoryId);
+    }
 //    getTopTenMovies() return array of array list movies {Id of movie,name,png url,year,rating,}
 
     @RequestMapping(value = "/movies/topten", method = RequestMethod.GET)
