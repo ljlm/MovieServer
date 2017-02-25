@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +21,27 @@ public class DBManager {
 
 
     public  Map<String, Object> getMovieById (Integer id){
-        List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies WHERE id="+id+";");
+        List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserver.movies WHERE id="+id+";");
         return movies.get(0);
 //        SELECT * FROM movieserverdb.rating WHERE id=1
     }
 
+    public  Map<String, Object> getUserById (Integer id){
+        List<Map<String,Object>> user = jdbcTemplate.queryForList("SELECT * FROM movieserver.users WHERE id="+id+";");
+        return user.get(0);
+//        SELECT * FROM movieserverdb.rating WHERE id=1
+    }
+    
+    public  boolean updateMovieRating (Integer id){
+    	 String inserQuery = "INSERT INTO movies (user_name, password, first_name, last_name,credits) VALUES (?, ?, ?, ?,?) ";
+         int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER};
 
+         Object[] params = new Object[] { "lionelmina","lionelmina","Lionel", "mina",0};
+         jdbcTemplate.update(inserQuery, params, types);
 
+        return true;
+//        SELECT * FROM movieserverdb.rating WHERE id=1
+    }
+    
+    
 }

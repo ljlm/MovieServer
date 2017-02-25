@@ -138,6 +138,13 @@ public class Controller {
     public Map<String, Object> getMoviesById(@PathVariable Integer movieID){
         return dbManager.getMovieById(movieID);
     }
+    
+    @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
+    public Map<String, Object> getUserById(@PathVariable Integer userId){
+        return dbManager.getUserById(userId);
+    }
+    
+    
     //function getRatingComment(movieID) return array of arrays String  {User ID,Commment ,rating} order by Rating
     @RequestMapping(value = "/comments/{movieID}", method = RequestMethod.GET)
     public String getMoviesComments(@PathVariable String movieID){
