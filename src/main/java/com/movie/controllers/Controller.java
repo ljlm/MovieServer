@@ -1,6 +1,7 @@
 package com.movie.controllers;
 
 import com.movie.Tools.Categories;
+import com.movie.dal.DBManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -128,6 +129,11 @@ public class Controller {
 
         }
         return movieList.toString();
+    }
+
+    @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
+    public Map<String, Object> getMoviesById(@PathVariable Integer movieID){
+        return DBManager.getMovieById(movieID);
     }
     //function getRatingComment(movieID) return array of arrays String  {User ID,Commment ,rating} order by Rating
     @RequestMapping(value = "/comments/{movieID}", method = RequestMethod.GET)
