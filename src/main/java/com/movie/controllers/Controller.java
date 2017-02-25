@@ -21,7 +21,10 @@ import java.util.Map;
 public class Controller {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    public JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public DBManager dbManager;
 
     @RequestMapping("/createtables")
     public void createTables(){
@@ -133,7 +136,7 @@ public class Controller {
 
     @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
     public Map<String, Object> getMoviesById(@PathVariable Integer movieID){
-        return DBManager.getMovieById(movieID);
+        return dbManager.getMovieById(movieID);
     }
     //function getRatingComment(movieID) return array of arrays String  {User ID,Commment ,rating} order by Rating
     @RequestMapping(value = "/comments/{movieID}", method = RequestMethod.GET)
@@ -153,10 +156,10 @@ public class Controller {
         return "List of top 10 movies";
     }
     //    function rentMovie(MovieId) {creditLeft}
-    @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
-    public String returnMovie (@PathVariable String movieID){
-        return movieID+" returned";
-    }
+//    @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
+//    public String returnMovie (@PathVariable String movieID){
+//        return movieID+" returned";
+//    }
 
 //    function returnMovie(MovieId) {}
 
