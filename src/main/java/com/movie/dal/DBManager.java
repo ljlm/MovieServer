@@ -23,7 +23,16 @@ public class DBManager {
     public  Map<String, Object> getMovieById (Integer id){
         List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserver.movies WHERE id="+id+";");
         return movies.get(0);
-//        SELECT * FROM movieserverdb.rating WHERE id=1
+    }
+
+    public List<Map<String,Object>> getMovieList (){
+        List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;");
+        return movies;
+    }
+
+    public  List<Map<String, Object>> getMovieByCategory (Integer category){
+        List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies WHERE category="+category+";");
+        return movies;
     }
 
     public  Map<String, Object> getUserById (Integer id){

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,40 +46,40 @@ public class Controller {
 
         jdbcTemplate.execute("drop table if exists  movies");
         jdbcTemplate.execute("CREATE TABLE movies(" +
-                "id int NOT NULL AUTO_INCREMENT ,movie_name VARCHAR(255) , year int, category int, info VARCHAR(1027) , rating FLOAT ,available int,PRIMARY KEY (id))");
-        types = new int[] { Types.VARCHAR,Types.INTEGER, Types.INTEGER,Types.VARCHAR , Types.FLOAT ,Types.INTEGER};
-        inserQuery = "INSERT INTO movies (movie_name, year, category, info,rating ,available ) VALUES (?, ?, ?, ?,?,?) ";
+                "id int NOT NULL AUTO_INCREMENT ,movie_name VARCHAR(255) , year int, category int, info VARCHAR(1027) , rating FLOAT ,raters int,available int,PRIMARY KEY (id))");
+        types = new int[] { Types.VARCHAR,Types.INTEGER, Types.INTEGER,Types.VARCHAR , Types.FLOAT ,Types.INTEGER,Types.INTEGER};
+        inserQuery = "INSERT INTO movies (movie_name, year, category, info,rating ,raters ,available ) VALUES (?, ?, ?, ?,?,?,?) ";
         params = new Object[] { "City of God",2002, Categories.CRIME,"Two boys growing up in a violent neighborhood" +
-                "of Rio de Janeiro take different paths: one becomes a photographer, the other a drug dealer.",8.7,3};
+                "of Rio de Janeiro take different paths: one becomes a photographer, the other a drug dealer.",8.0,1,3};
         jdbcTemplate.update(inserQuery, params, types);
 
         params = new Object[] { "Requiem for a Dream",2000,Categories.DRAMA,"he drug-induced utopias of four Coney Island people are" +
-                " shattered when their addictions run deep.",8.4,3};
+                " shattered when their addictions run deep.",0,0,3};
         jdbcTemplate.update(inserQuery, params, types);
 
         params = new Object[] { "The Big Lebowski",1998, Categories.ADVENTURE,"\"The Dude\" Lebowski, mistaken for a millionaire Lebowski," +
-                " seeks restitution for his ruined rug and enlists his bowling buddies to help get it.",8.2,3};
+                " seeks restitution for his ruined rug and enlists his bowling buddies to help get it.",0,0,3};
         jdbcTemplate.update(inserQuery, params, types);
 
         params = new Object[] { "Eternal Sunshine of the Spotless Mind",2004, Categories.DRAMA,"When their relationship turns sour, a couple undergoes" +
                 " a procedure to have each other erased from their memories. But it is only through the process of loss that they discover what they had " +
-                "to begin with.",8.3,3};
+                "to begin with.",0,0,3};
         jdbcTemplate.update(inserQuery, params, types);
 
         params = new Object[] { "Spirited Away",2004, Categories.ANIMATION,"During her family's move to the suburbs, a sullen 10-year-old girl wanders " +
-                "into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",8.6,3};
+                "into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",0,0,3};
         jdbcTemplate.update(inserQuery, params, types);
 
         params = new Object[] { "Donnie Darko",2001, Categories.DRAMA,"A troubled teenager is plagued by visions of a man in a large rabbit suit who " +
-                "manipulates him to commit a series of crimes, after he narrowly escapes a bizarre accident.",8.1,3};
+                "manipulates him to commit a series of crimes, after he narrowly escapes a bizarre accident.",0,0,3};
         jdbcTemplate.update(inserQuery, params, types);
 
         params = new Object[] { "Memento",2000, Categories.THRILLER,"A man juggles searching for his wife's murderer and keeping his short-term memory" +
-                " loss from being an obstacle.",8.5,3};
+                " loss from being an obstacle.",0,0,3};
         jdbcTemplate.update(inserQuery, params, types);
 
         params = new Object[] { "Catch Me If You Can",2002, Categories.ACCION,"The true story of Frank Abagnale Jr. who, before his 19th birthday, " +
-                "successfully conned millions of dollars' worth of checks as a Pan Am pilot, doctor, and legal prosecutor.",8.0,3};
+                "successfully conned millions of dollars' worth of checks as a Pan Am pilot, doctor, and legal prosecutor.",0,0,3};
         jdbcTemplate.update(inserQuery, params, types);
 
 
@@ -122,16 +121,8 @@ public class Controller {
     //function getMovie()
 //    return array of array {Id of movie,name,png url,year,rating}
     @RequestMapping(value = "/movies", method = RequestMethod.GET)
-    public String getMovies(){
-        System.out.println(jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;"));
-        List<Map<String,Object>> movies =jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;");
-        List<String> movieList= new ArrayList<>();
-        for (Map<String,Object> movie: movies) {
-            String value = (String) movie.get("movie_name");
-            movieList.add(value);
-
-        }
-        return movieList.toString();
+    public List getMovies(){
+        return dbManager.getMovieList();
     }
 
     @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
@@ -156,6 +147,11 @@ public class Controller {
         return "User rated movie "+movieID+" as "+rating;
     }
 
+//    DBManager.getMovieListByCategory
+    @RequestMapping(value = "/movies/categories/{categoryId}", method = RequestMethod.GET)
+    public List getMoviesByCategory(@PathVariable Integer categoryId){
+        return dbManager.getMovieByCategory(categoryId);
+    }
 //    getTopTenMovies() return array of array list movies {Id of movie,name,png url,year,rating,}
 
     @RequestMapping(value = "/movies/topten", method = RequestMethod.GET)
