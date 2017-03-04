@@ -167,6 +167,7 @@ public class Controller {
     @RequestMapping(value = "/ratings/{userId}/{movieId}/{rating}", method = RequestMethod.GET)
     public String updateMovieRating (@PathVariable Integer movieId, @PathVariable Integer userId, @PathVariable Integer rating){
         dbManager.getMovieRatingByUser(movieId, userId);
+        dbManager.unrateMovie(movieId,userId);
         return dbManager.updateMovieRating( movieId,  userId,  rating)+"";
 
 

@@ -52,6 +52,7 @@ public class DBManager {
     }
 
     public String updateMovieRatingAndRaters(int movieId , Float rating, int raters, int userId){
+
 //        verify if there is already an
         StringBuilder quary = new StringBuilder();
         quary.append("UPDATE movieserverdb.movies SET raters=").append(raters).append("  WHERE CustomerID=").append(movieId).append(";");
@@ -72,6 +73,15 @@ public class DBManager {
         }
         return 0;
     }
+    public void unrateMovie(int movieId, int userId){
+        StringBuilder quary = new StringBuilder();
+        quary.append("IF EXISTS UPDATE movieserverdb.rating SET rating=").append("0").append("  WHERE movie_id=").append(movieId).append(" && user_id=").append(userId).append(";");
+        jdbcTemplate.update(quary.toString());
+    }
+
+
+
+
     
     
 }
