@@ -62,14 +62,15 @@ public class DBManager {
         return "";
     }
 
-    public String getMovieRatingByUser(int movieId, int userId){
+    public int getMovieRatingByUser(int movieId, int userId){
         StringBuilder quary = new StringBuilder();
         quary.append("SELECT * FROM movieserverdb.rating WHERE user_id=").append(userId).append(" && movie_id=").append(movieId).append(";");
         List<Map<String,Object>> movies = jdbcTemplate.queryForList(quary.toString());
         if (movies.size()>0){
-            return (String) movies.get(0).get("rating");
+            Integer rating = (Integer) movies.get(0).get("rating");
+            return rating;
         }
-        return "0";
+        return 0;
     }
     
     
