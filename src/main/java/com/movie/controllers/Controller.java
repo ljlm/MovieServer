@@ -2,6 +2,7 @@ package com.movie.controllers;
 
 import com.movie.Tools.Categories;
 import com.movie.dal.DBManager;
+import com.movie.dal.DataManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,6 +25,9 @@ public class Controller {
 
     @Autowired
     public DBManager dbManager;
+
+    @Autowired
+    public DataManager dataManager;
 
     @RequestMapping("/createtables")
     public void createTables(){
@@ -89,16 +93,16 @@ public class Controller {
 //                "id int NOT NULL AUTO_INCREMENT, user_id int, movie_id int, rating int ,comment VARCHAR(255),PRIMARY KEY (id)");
         jdbcTemplate.execute("CREATE TABLE rating(" +
                 "id int NOT NULL AUTO_INCREMENT ,user_id int , movie_id int  , rating int, comment VARCHAR(255),PRIMARY KEY (id))");
-         inserQuery = "INSERT INTO rating (user_id ,movie_id, rating, comment) VALUES (?, ?,?,? ) ";
-         types = new int[] { Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.VARCHAR};
-          params = new Object[] { 1,1 ,8,"City of God is a beautiful movie. I felt like a child."};
+        inserQuery = "INSERT INTO rating (user_id ,movie_id, rating, comment) VALUES (?, ?,?,? ) ";
+        types = new int[] { Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.VARCHAR};
+        params = new Object[] { 1,1 ,8,"City of God is a beautiful movie. I felt like a child."};
         jdbcTemplate.update(inserQuery, params, types);
 
 
     }
 
 
-//    @RequestMapping("/inserttest")
+    //    @RequestMapping("/inserttest")
 //    public String index() {
 //
 ////        jdbcTemplate.execute("CREATE TABLE users(" +
@@ -129,13 +133,13 @@ public class Controller {
     public Map<String, Object> getMoviesById(@PathVariable Integer movieID){
         return dbManager.getMovieById(movieID);
     }
-    
+
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
     public Map<String, Object> getUserById(@PathVariable Integer userId){
         return dbManager.getUserById(userId);
     }
-    
-    
+
+
     //function getRatingComment(movieID) return array of arrays String  {User ID,Commment ,rating} order by Rating
     @RequestMapping(value = "/comments/{movieID}", method = RequestMethod.GET)
     public String getMoviesComments(@PathVariable String movieID){
@@ -147,7 +151,7 @@ public class Controller {
         return "User rated movie "+movieID+" as "+rating;
     }
 
-//    DBManager.getMovieListByCategory
+    //    DBManager.getMovieListByCategory
     @RequestMapping(value = "/movies/categories/{categoryId}", method = RequestMethod.GET)
     public List getMoviesByCategory(@PathVariable Integer categoryId){
         return dbManager.getMovieByCategory(categoryId);
@@ -158,17 +162,14 @@ public class Controller {
     public String getTopTenMovies(){
         return "List of top 10 movies";
     }
-    //    function rentMovie(MovieId) {creditLeft}
-//    @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
-//    public String returnMovie (@PathVariable String movieID){
-//        return movieID+" returned";
-//    }
 
-//    function returnMovie(MovieId) {}
 
-//
+    @RequestMapping(value = "/ratings/{userId}/{movieId}/{rating}", method = RequestMethod.GET)
+    public String updateMovieRating (@PathVariable Integer movieId, @PathVariable Integer userId, @PathVariable Integer rating){
+        dbManager.getMovieRatingByUser(movieId, userId);
+        return dbManager.updateMovieRating( movieId,  userId,  rating)+"";
 
-//    function acountinfo(userid){creditLeft,firstName,LastName,arrayofmovies}
 
+    }
 
 }

@@ -38,10 +38,9 @@ public class DBManager {
     public  Map<String, Object> getUserById (Integer id){
         List<Map<String,Object>> user = jdbcTemplate.queryForList("SELECT * FROM movieserver.users WHERE id="+id+";");
         return user.get(0);
-//        SELECT * FROM movieserverdb.rating WHERE id=1
     }
     
-    public  boolean updateMovieRating (Integer id){
+    public  boolean updateMovieRating (Integer movieId, Integer userId, Integer rating){
     	 String inserQuery = "INSERT INTO movies (user_name, password, first_name, last_name,credits) VALUES (?, ?, ?, ?,?) ";
          int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER};
 
@@ -50,6 +49,27 @@ public class DBManager {
 
         return true;
 //        SELECT * FROM movieserverdb.rating WHERE id=1
+    }
+
+    public String updateMovieRatingAndRaters(int movieId , Float rating, int raters, int userId){
+//        verify if there is already an
+        StringBuilder quary = new StringBuilder();
+        quary.append("UPDATE movieserverdb.movies SET raters=").append(raters).append("  WHERE CustomerID=").append(movieId).append(";");
+//        String quary = "UPDATE movieserverdb.movies SET raters="+raters +"  WHERE CustomerID="+movieId+";";
+//        Object[] params = new Object[] { "Spirited Away",2004, Categories.ANIMATION,"During her family's move to the suburbs, a sullen 10-year-old girl wanders " +
+//                "into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",0,0,3};
+        jdbcTemplate.update(quary.toString());
+        return "";
+    }
+
+    public String getMovieRatingByUser(int movieId, int userId){
+        StringBuilder quary = new StringBuilder();
+        quary.append("SELECT * FROM movieserverdb.rating WHERE user_id=").append(userId).append(" && movie_id=").append(movieId).append(";");
+        List<Map<String,Object>> movies = jdbcTemplate.queryForList(quary.toString());
+        if (movies.size()>0){
+            return (String) movies.get(0).get("rating");
+        }
+        return "0";
     }
     
     
