@@ -83,7 +83,7 @@ public class DBManager {
 
     private  Integer getRatersForMovie (int movieId){
         StringBuilder quary = new StringBuilder();
-        quary.append("SELECT raters FROM movieserverdb.movies WHERE movie_id=").append(movieId).append(";");
+        quary.append("SELECT * FROM movieserverdb.movies WHERE id=").append(movieId).append(";");
         List<Map<String,Object>> raters =  jdbcTemplate.queryForList(quary.toString());
         raters.get(0).get("raters");
         return (Integer) raters.get(0).get("raters");
