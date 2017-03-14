@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,37 +17,56 @@ import java.util.Map;
 @EnableAutoConfiguration
 @Service
 public class DBManager {
+    private static final String SHARED_LOCK =" LOCK IN SHARE MODE;";
+    private static final String PRIVATE_LOCK=" FOR UPDATE;";
+
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
 
     public  Map<String, Object> getMovieById (Integer id){
-        List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserver.movies WHERE id="+id+";");
+        List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserver.movies" + " WHERE id="+id+ SHARED_LOCK);
         return movies.get(0);
     }
 
     public List<Map<String,Object>> getMovieList (){
-        List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies;");
+        List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies"+ SHARED_LOCK);
         return movies;
     }
 
     public  List<Map<String, Object>> getMovieByCategory (Integer category){
-        List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies WHERE category="+category+";");
+        List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserverdb.movies WHERE category="+category+ SHARED_LOCK);
         return movies;
     }
 
     public  Map<String, Object> getUserById (Integer id){
-        List<Map<String,Object>> user = jdbcTemplate.queryForList("SELECT * FROM movieserver.users WHERE id="+id+";");
+        List<Map<String,Object>> user = jdbcTemplate.queryForList("SELECT * FROM movieserverdb.users WHERE id="+id + SHARED_LOCK);
         return user.get(0);
     }
-    
-    public  boolean updateMovieRating (Integer movieId, Integer userId, Integer rating){
-    	 String inserQuery = "INSERT INTO movies (user_name, password, first_name, last_name,credits) VALUES (?, ?, ?, ?,?) ";
-         int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER};
 
-         Object[] params = new Object[] { "lionelmina","lionelmina","Lionel", "mina",0};
-         jdbcTemplate.update(inserQuery, params, types);
+    public List<Map<String, Object>> getMovieComments(Integer movieId){
+        List<Map<String,Object>> response = new ArrayList<>();
+        List<Map<String,Object>> comments = jdbcTemplate.queryForList("SELECT * FROM movieserverdb.rating WHERE movie_id="+ movieId + SHARED_LOCK);
+        for (Map<String,Object> comment:comments ) {
+            Map<String, Object> userAndComment = new HashMap<>();
+            Map <String, Object> user = getUserById((Integer) comment.get("user_id"));
+            userAndComment.put("user",user);
+            userAndComment.put("comment",comment);
+            response.add(userAndComment);
+        }
+        return response;
+    }
+
+
+
+
+    public  boolean updateMovieRating (Integer movieId, Integer userId, Integer rating){
+        String inserQuery = "INSERT INTO movies (user_name, password, first_name, last_name,credits) VALUES (?, ?, ?, ?,?) ";
+        int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER};
+
+        Object[] params = new Object[] { "lionelmina","lionelmina","Lionel", "mina",0};
+        jdbcTemplate.update(inserQuery, params, types);
 
         return true;
 //        SELECT * FROM movieserverdb.rating WHERE id=1
@@ -66,6 +87,7 @@ public class DBManager {
     public int getMovieRatingByUser(int movieId, int userId){
         StringBuilder quary = new StringBuilder();
         quary.append("SELECT * FROM movieserverdb.rating WHERE user_id=").append(userId).append(" && movie_id=").append(movieId).append(";");
+
         List<Map<String,Object>> movies = jdbcTemplate.queryForList(quary.toString());
         if (movies.size()>0){
             Integer rating = (Integer) movies.get(0).get("rating");
@@ -75,7 +97,7 @@ public class DBManager {
     }
     public void unrateMovie(int movieId, int userId){
         StringBuilder quary = new StringBuilder();
-        quary.append("UPDATE  movieserverdb.rating SET rating=").append("0").append("  WHERE movie_id=").append(movieId).append(" && user_id=").append(userId).append(";");
+        quary.append("UPDATE  movieserverdb.rating SET rating=").append("0").append("  WHERE movie_id=").append(movieId).append(" && user_id=").append(userId).append(PRIVATE_LOCK);
         jdbcTemplate.update(quary.toString());
         getRatersForMovie(movieId);
 
@@ -93,6 +115,6 @@ public class DBManager {
 
 
 
-    
-    
+
+
 }

@@ -140,14 +140,13 @@ public class Controller {
     }
 
 
-    //function getRatingComment(movieID) return array of arrays String  {User ID,Commment ,rating} order by Rating
     @RequestMapping(value = "/comments/{movieID}", method = RequestMethod.GET)
-    public String getMoviesComments(@PathVariable String movieID){
-        return "List of comments for movie="+movieID;
+    public List getMoviesComments(@PathVariable Integer movieID){
+        return dbManager.getMovieComments(movieID);
     }
 
     @RequestMapping(value = "/movies/{movieID}/{rating}", method = RequestMethod.GET)
-    public String AddMovieRating(@PathVariable String movieID,@PathVariable String rating){
+    public String AddMovieRating(@PathVariable Integer movieID,@PathVariable Integer rating){
         return "User rated movie "+movieID+" as "+rating;
     }
 
@@ -164,13 +163,11 @@ public class Controller {
     }
 
 
-    @RequestMapping(value = "/ratings/{userId}/{movieId}/{rating}", method = RequestMethod.GET)
+    @RequestMapping(value = "/ratings/{userId}/{movieId}/{rating}", method = RequestMethod.PUT)
     public String updateMovieRating (@PathVariable Integer movieId, @PathVariable Integer userId, @PathVariable Integer rating){
-        dbManager.getMovieRatingByUser(movieId, userId);
+//        dbManager.getMovieRatingByUser(movieId, userId);
         dbManager.unrateMovie(movieId,userId);
-        return dbManager.updateMovieRating( movieId,  userId,  rating)+"";
-
-
+//        return dbManager.updateMovieRating( movieId,  userId,  rating)+"";
+        return "SOMETHING";
     }
-
 }
