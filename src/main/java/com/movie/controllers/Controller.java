@@ -1,5 +1,6 @@
 package com.movie.controllers;
 
+import com.movie.Filters.HttpResettableServletRequest;
 import com.movie.Tools.Categories;
 import com.movie.dal.DBManager;
 import com.movie.dal.DataManager;
@@ -11,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Types;
 import java.util.List;
 import java.util.Map;
@@ -134,6 +139,8 @@ public class Controller {
         return dbManager.getMovieById(movieID);
     }
 
+
+
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
     public Map<String, Object> getUserById(@PathVariable Integer userId){
         return dbManager.getUserById(userId);
@@ -169,5 +176,14 @@ public class Controller {
         dbManager.unrateMovie(movieId,userId);
 //        return dbManager.updateMovieRating( movieId,  userId,  rating)+"";
         return "SOMETHING";
+    }
+    @RequestMapping( method = RequestMethod.GET)
+    public void startSession(ServletRequest servletRequest, ServletResponse servletResponse){
+        HttpResettableServletRequest wrappedRequest = new HttpResettableServletRequest((HttpServletRequest) servletRequest);
+        HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
+        session.getAttribute("authenticated");
+        session.getAttribute("username");
+
+
     }
 }

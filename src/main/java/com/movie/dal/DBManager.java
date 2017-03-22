@@ -1,5 +1,6 @@
 package com.movie.dal;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,6 +27,7 @@ public class DBManager {
 
 
     public  Map<String, Object> getMovieById (Integer id){
+        addRatingToMovie(id+1,9.3f);
         List<Map<String,Object>> movies = jdbcTemplate.queryForList("SELECT * FROM movieserver.movies" + " WHERE id="+id+ SHARED_LOCK);
         return movies.get(0);
     }
@@ -95,6 +97,31 @@ public class DBManager {
         }
         return 0;
     }
+
+    public Map<String, Object> addRatingToMovie (Integer movieId, Float rating){
+        String query = ("UPDATE movieserverdb.movies SET locked=1 WHERE id="+movieId+" && locked=0"+PRIVATE_LOCK  );
+        int res = jdbcTemplate.update(query);
+        System.out.println(res);
+        String query2 = ("SELECT * FROM movieserverdb.movies WHERE id="+movieId+" ;" );
+        List<Map<String,Object>> movies = jdbcTemplate.queryForList(query2);
+        if (movies.size() == 1){
+            int raters = (Integer) movies.get(0).get("raters") + 1;
+            String query3 = ("UPDATE movieserverdb.movies SET raters="+raters + " && rating= "+ rating +" WHERE id="+movieId+PRIVATE_LOCK  );
+            int res2 = jdbcTemplate.update(query);
+            System.out.println(res2);
+            String query4 = ("UPDATE movieserverdb.movies SET locked=0 WHERE id="+movieId+" && locked=1"+PRIVATE_LOCK  );
+            int res3 = jdbcTemplate.update(query);
+
+
+
+        }
+        else {
+//            TODO retry
+        }
+        return null;
+    }
+
+
     public void unrateMovie(int movieId, int userId){
         StringBuilder quary = new StringBuilder();
         quary.append("UPDATE  movieserverdb.rating SET rating=").append("0").append("  WHERE movie_id=").append(movieId).append(" && user_id=").append(userId).append(PRIVATE_LOCK);
