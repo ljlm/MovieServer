@@ -21,18 +21,18 @@ public class FilterRegistrator {
         List<String> urlPatterns = new ArrayList<>();
         urlPatterns.add( "/*");
         filterRegBean.setUrlPatterns(urlPatterns);
-        filterRegBean.setOrder(0);
+        filterRegBean.setOrder(1);
         return filterRegBean;
     }
 
     @Bean
-    public FilterRegistrationBean securityFilter(){
+    public FilterRegistrationBean newUserFilter(){
         FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
-        filterRegBean.setFilter(new SecurityFilter());
+        filterRegBean.setFilter(new NewUserFilter());
         List<String> urlPatterns = new ArrayList<>();
-        urlPatterns.add("/session/*");
+        urlPatterns.add("/newuser");
         filterRegBean.setUrlPatterns(urlPatterns);
-        filterRegBean.setOrder(1);
+        filterRegBean.setOrder(0);
         return filterRegBean;
     }
 
