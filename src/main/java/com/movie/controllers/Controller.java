@@ -74,7 +74,7 @@ public class Controller {
 //        dbManager.getMovieRatingByUser(movieId, userId);
 //        dataManager.unrateMovie(movieId,userId);
 //        return dbManager.updateMovieRating( movieId,  userId,  rating)+"";
-        dataManager.rateMovie(movieId, userId);
+//        dataManager.rateMovie(movieId, userId);
 
         return "SOMETHING";
     }

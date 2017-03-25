@@ -98,7 +98,7 @@ public class DataManager {
     }
 
     public int rateMovie (int movieId, int userId, int rating){
-        
+        return 0;
     }
 
 //TODO fix it

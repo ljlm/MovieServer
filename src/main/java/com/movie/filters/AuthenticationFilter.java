@@ -18,6 +18,8 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpResettableServletRequest wrappedRequest = new HttpResettableServletRequest((HttpServletRequest) servletRequest);
+        System.out.println(wrappedRequest);
+
         HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
         session.setAttribute("authenticated","true");
     }
