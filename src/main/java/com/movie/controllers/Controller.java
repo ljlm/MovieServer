@@ -1,12 +1,9 @@
 package com.movie.controllers;
 
-import com.movie.Filters.HttpResettableServletRequest;
-import com.movie.Tools.Categories;
-import com.movie.dal.DBManager;
 import com.movie.dal.DataManager;
+import com.movie.filters.HttpResettableServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,7 +13,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 
@@ -26,132 +22,35 @@ import java.util.Map;
 public class Controller {
 
     @Autowired
-    public JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public DBManager dbManager;
-
-    @Autowired
     public DataManager dataManager;
 
-    @RequestMapping("/createtables")
-    public void createTables(){
-        jdbcTemplate.execute("drop table if exists users ");
 
-        jdbcTemplate.execute("CREATE TABLE users(" +
-                "id int NOT NULL AUTO_INCREMENT ,user_name VARCHAR(255) NOT NULL , password VARCHAR(255) NOT NULL  , first_name VARCHAR(255), last_name VARCHAR(255),credits int, locked int,PRIMARY KEY (id))");
-
-        String inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,credits,locked) VALUES (?, ?, ?, ?,?,?) ";
-        int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER,Types.INTEGER};
-
-        Object[] params = new Object[] { "lionelmina","lionelmina","Lionel", "mina",0,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        params = new Object[] { "elilevi","elilevi","eli", "levi",0,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        params = new Object[] { "tiggermina","tiggermina","tiger", "mina",0,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        jdbcTemplate.execute("drop table if exists  movies");
-        jdbcTemplate.execute("CREATE TABLE movies(" +
-                "id int NOT NULL AUTO_INCREMENT ,movie_name VARCHAR(255) , year int, category int, info VARCHAR(1027) , rating FLOAT ,raters int,available int,locked int,PRIMARY KEY (id))");
-        types = new int[] { Types.VARCHAR,Types.INTEGER, Types.INTEGER,Types.VARCHAR , Types.FLOAT ,Types.INTEGER,Types.INTEGER,Types.INTEGER};
-        inserQuery = "INSERT INTO movies (movie_name, year, category, info,rating ,raters ,available,locked ) VALUES (?, ?, ?, ?,?,?,?,?) ";
-        params = new Object[] { "City of God",2002, Categories.CRIME,"Two boys growing up in a violent neighborhood" +
-                "of Rio de Janeiro take different paths: one becomes a photographer, the other a drug dealer.",8.0,1,3,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        params = new Object[] { "Requiem for a Dream",2000,Categories.DRAMA,"he drug-induced utopias of four Coney Island people are" +
-                " shattered when their addictions run deep.",0,0,3,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        params = new Object[] { "The Big Lebowski",1998, Categories.ADVENTURE,"\"The Dude\" Lebowski, mistaken for a millionaire Lebowski," +
-                " seeks restitution for his ruined rug and enlists his bowling buddies to help get it.",0,0,3,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        params = new Object[] { "Eternal Sunshine of the Spotless Mind",2004, Categories.DRAMA,"When their relationship turns sour, a couple undergoes" +
-                " a procedure to have each other erased from their memories. But it is only through the process of loss that they discover what they had " +
-                "to begin with.",0,0,3,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        params = new Object[] { "Spirited Away",2004, Categories.ANIMATION,"During her family's move to the suburbs, a sullen 10-year-old girl wanders " +
-                "into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",0,0,3,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        params = new Object[] { "Donnie Darko",2001, Categories.DRAMA,"A troubled teenager is plagued by visions of a man in a large rabbit suit who " +
-                "manipulates him to commit a series of crimes, after he narrowly escapes a bizarre accident.",0,0,3,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        params = new Object[] { "Memento",2000, Categories.THRILLER,"A man juggles searching for his wife's murderer and keeping his short-term memory" +
-                " loss from being an obstacle.",0,0,3,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-        params = new Object[] { "Catch Me If You Can",2002, Categories.ACCION,"The true story of Frank Abagnale Jr. who, before his 19th birthday, " +
-                "successfully conned millions of dollars' worth of checks as a Pan Am pilot, doctor, and legal prosecutor.",0,0,3,0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-
-        jdbcTemplate.execute("drop table if exists rating");
-
-//        jdbcTemplate.execute("CREATE TABLE rating(" +
-//                "id int NOT NULL AUTO_INCREMENT, user_id int, movie_id int, rating int ,comment VARCHAR(255),PRIMARY KEY (id)");
-        jdbcTemplate.execute("CREATE TABLE rating(" +
-                "id int NOT NULL AUTO_INCREMENT ,user_id int , movie_id int  , rating int, comment VARCHAR(255),locked int,PRIMARY KEY (id))");
-        inserQuery = "INSERT INTO rating (user_id ,movie_id, rating, comment,locked) VALUES (?, ?,?,?,? ) ";
-        types = new int[] { Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.VARCHAR,Types.INTEGER};
-        params = new Object[] { 1,1 ,8,"City of God is a beautiful movie. I felt like a child.",0};
-        jdbcTemplate.update(inserQuery, params, types);
-
-
-    }
-
-
-    //    @RequestMapping("/inserttest")
-//    public String index() {
-//
-////        jdbcTemplate.execute("CREATE TABLE users(" +
-////                "id int NOT NULL AUTO_INCREMENT ,user_name VARCHAR(255), first_name VARCHAR(255), last_name VARCHAR(255),credits int,PRIMARY KEY (id))");
-//
-//
-//        String inserQuery = "INSERT INTO users (user_name, first_name, last_name,credits) VALUES (?, ?, ?,?) ";
-//        Object[] params = new Object[] { "lionelmina","Lionel", "mina",0};
-//        int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER};
-//        jdbcTemplate.update(inserQuery, params, types);
-//
-//        String statment= "SELECT * FROM users";
-//        System.out.println( ""+jdbcTemplate.queryForList(statment));
-//
-//        return "table inserted";
-//
-//
-//
-//    }
-    //function getMovie()
-//    return array of array {Id of movie,name,png url,year,rating}
     @RequestMapping(value = "/movies", method = RequestMethod.GET)
-    public List getMovies(){
-        return dbManager.getMovieList();
+    public List getMovies(ServletRequest servletRequest){
+        HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
+        System.out.println(session.getAttributeNames().toString());
+        return dataManager.getMovieList();
     }
 
     @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
     public Map<String, Object> getMoviesById(@PathVariable Integer movieID){
-        return dbManager.getMovieById(movieID);
+        return dataManager.getMovieById(movieID);
     }
 
 
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
     public Map<String, Object> getUserById(@PathVariable Integer userId){
-        return dbManager.getUserById(userId);
+        return dataManager.getUserById(userId);
     }
 
 
     @RequestMapping(value = "/comments/{movieID}", method = RequestMethod.GET)
     public List getMoviesComments(@PathVariable Integer movieID){
-        return dbManager.getMovieComments(movieID);
+        return dataManager.getMovieComments(movieID);
     }
 
+//    TODO FIX
     @RequestMapping(value = "/movies/{movieID}/{rating}", method = RequestMethod.GET)
     public String AddMovieRating(@PathVariable Integer movieID,@PathVariable Integer rating){
         return "User rated movie "+movieID+" as "+rating;
@@ -160,7 +59,7 @@ public class Controller {
     //    DBManager.getMovieListByCategory
     @RequestMapping(value = "/movies/categories/{categoryId}", method = RequestMethod.GET)
     public List getMoviesByCategory(@PathVariable Integer categoryId){
-        return dbManager.getMovieByCategory(categoryId);
+        return dataManager.getMovieByCategory(categoryId);
     }
 //    getTopTenMovies() return array of array list movies {Id of movie,name,png url,year,rating,}
 
@@ -173,17 +72,19 @@ public class Controller {
     @RequestMapping(value = "/ratings/{userId}/{movieId}/{rating}", method = RequestMethod.PUT)
     public String updateMovieRating (@PathVariable Integer movieId, @PathVariable Integer userId, @PathVariable Integer rating){
 //        dbManager.getMovieRatingByUser(movieId, userId);
-        dbManager.unrateMovie(movieId,userId);
+//        dataManager.unrateMovie(movieId,userId);
 //        return dbManager.updateMovieRating( movieId,  userId,  rating)+"";
+        dataManager.rateMovie(movieId, userId);
+
         return "SOMETHING";
     }
+
     @RequestMapping( method = RequestMethod.GET)
     public void startSession(ServletRequest servletRequest, ServletResponse servletResponse){
         HttpResettableServletRequest wrappedRequest = new HttpResettableServletRequest((HttpServletRequest) servletRequest);
         HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
         session.getAttribute("authenticated");
         session.getAttribute("username");
-
 
     }
 }

@@ -1,4 +1,4 @@
-package com.movie.Filters;
+package com.movie.filters;
 
 import javax.servlet.*;
 import java.io.IOException;
@@ -6,7 +6,8 @@ import java.io.IOException;
 /**
  * Created by lionelm on 3/15/2017.
  */
-public class AuthenticationFilter implements Filter {
+public class SecurityFilter implements Filter {
+
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

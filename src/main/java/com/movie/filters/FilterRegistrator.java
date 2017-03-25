@@ -1,4 +1,4 @@
-package com.movie.Filters;
+package com.movie.filters;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.movie.Filters;
+package com.movie.filters;
 
 import org.apache.commons.io.IOUtils;
 
