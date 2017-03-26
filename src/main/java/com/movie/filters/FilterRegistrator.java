@@ -1,5 +1,7 @@
 package com.movie.filters;
 
+import com.movie.dal.DataManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -13,11 +15,13 @@ import java.util.List;
 @Component
 public class FilterRegistrator {
 
+    @Autowired
+    public DataManager dataManager;
 
     @Bean
     public FilterRegistrationBean authenticationFilter(){
         FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
-        filterRegBean.setFilter(new AuthenticationFilter());
+        filterRegBean.setFilter(new AuthenticationFilter(dataManager));
         List<String> urlPatterns = new ArrayList<>();
         urlPatterns.add( "/*");
         filterRegBean.setUrlPatterns(urlPatterns);

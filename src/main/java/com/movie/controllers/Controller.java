@@ -37,8 +37,6 @@ public class Controller {
         return dataManager.getMovieById(movieID);
     }
 
-
-
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
     public Map<String, Object> getUserById(@PathVariable Integer userId){
         return dataManager.getUserById(userId);

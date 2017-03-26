@@ -142,4 +142,16 @@ public class DataManager {
 
     }
 
+    public int getUserIdIfExists (String username, String password){
+        String query = "SELECT * FROM movieserverdb.users WHERE user_name='"+username + "';";
+        List<Map<String,Object>> users = dbManager.queryForList(query.toString());
+        if (users!=null){
+            Map<String, Object> user = users.get(0);
+            if (user != null && user.get("password").equals(password)){
+                return (Integer) user.get("id");
+            }
+        }
+        return -1;
+    }
+
 }
