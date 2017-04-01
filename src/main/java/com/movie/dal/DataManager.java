@@ -5,10 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lionelm on 2/25/2017.
@@ -102,28 +99,80 @@ public class DataManager {
     }
 
 //TODO fix it
-//    public Map<String, Object> addRatingToMovie (Integer movieId, Float rating){
-//        String query = ("UPDATE movieserverdb.movies SET locked=1 WHERE id="+movieId+" && locked=0"+PRIVATE_LOCK  );
-//        int res = jdbcTemplate.update(query);
-//        System.out.println(res);
-//        String query2 = ("SELECT * FROM movieserverdb.movies WHERE id="+movieId+" ;" );
-//        List<Map<String,Object>> movies = jdbcTemplate.queryForList(query2);
-//        if (movies.size() == 1){
-//            int raters = (Integer) movies.get(0).get("raters") + 1;
-//            String query3 = ("UPDATE movieserverdb.movies SET raters="+raters + " && rating= "+ rating +" WHERE id="+movieId+PRIVATE_LOCK  );
-//            int res2 = jdbcTemplate.update(query);
-//            System.out.println(res2);
-//            String query4 = ("UPDATE movieserverdb.movies SET locked=0 WHERE id="+movieId+" && locked=1"+PRIVATE_LOCK  );
-//            int res3 = jdbcTemplate.update(query);
-//
-//
-//
-//        }
-//        else {
-////            TODO retry
-//        }
-//        return null;
-//    }
+    public Map<String, Object> updateMovieRating (int movieId,  int user_id ,int rating ) throws Exception {
+        if (attemptToLockLine("movieserverdb.movies", movieId )){
+            if (attemptToLockLine("movieserverdb.movies", movieId)
+        }
+
+        try {
+            String query = ("UPDATE movieserverdb.movies SET locked=1 WHERE id=" + movieId + " && locked=0" + PRIVATE_LOCK);
+            if (dbManager.updateQuery(query) != 1) {
+                query = ("SELECT * movieserverdb.movies WHERE id=" + movieId + " " + SHARED_LOCK);
+                if (dbManager.updateQuery(query) == 1) {
+                    Thread.sleep(new Random().nextInt(150)+150);
+                    return updateMovieRating ( movieId,   user_id , rating );
+                }
+//                no such line. need to create
+
+            }
+            else{
+
+            }
+            String query2 = ("SELECT * FROM movieserverdb.movies WHERE id=" + movieId + " ;");
+            List<Map<String, Object>> movies = jdbcTemplate.queryForList(query2);
+            if (movies.size() == 1) {
+                int raters = (Integer) movies.get(0).get("raters") + 1;
+                String query3 = ("UPDATE movieserverdb.movies SET raters=" + raters + " && rating= " + rating + " WHERE id=" + movieId + PRIVATE_LOCK);
+                int res2 = jdbcTemplate.update(query);
+                System.out.println(res2);
+                String query4 = ("UPDATE movieserverdb.movies SET locked=0 WHERE id=" + movieId + " && locked=1" + PRIVATE_LOCK);
+                int res3 = jdbcTemplate.update(query);
+
+
+            } else {
+//            TODO retry
+            }
+
+            return null;
+        }
+        catch (Exception ex){
+            throw new Exception ();
+        }
+    }
+
+    private boolean attemptToLockLine (String db, int id){
+        String updateQuery = ("UPDATE "+ db +" SET locked=1 WHERE id=" + id + " && locked=0" + PRIVATE_LOCK);
+        String selectQuery= ("SELECT * FROM " + db + " WHERE id=" + id + " ;");
+        return handleLock(updateQuery, selectQuery);
+    }
+
+    private boolean attempTofreeLine (String db, int id){
+        String updateQuery = ("UPDATE "+ db +" SET locked=0 WHERE id=" + id + " && locked=1" + PRIVATE_LOCK);
+        String selectQuery= ("SELECT * FROM " + db + " WHERE id=" + id + " ;");
+        return handleLock(updateQuery, selectQuery);
+    }
+
+    private boolean handleLock (String updateQuery, String selectQuery){
+        if (dbManager.updateQuery(updateQuery) == 1){
+            return true;
+        }
+        else {
+            List list;
+            if ( (list = dbManager.queryForList(selectQuery)) != null && list.size()>0) {
+                return true;
+            }
+            else {
+                try{
+                    Thread.sleep(new Random().nextInt(150)+150);
+                }catch (Exception e)
+                {
+
+                }
+            }
+        }
+        return false;
+    }
+
 
     public void unrateMovie(int movieId, int userId){
         StringBuilder quary = new StringBuilder();
