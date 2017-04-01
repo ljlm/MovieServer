@@ -20,7 +20,7 @@ public class NewUserFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpResettableServletRequest wrappedRequest = new HttpResettableServletRequest((HttpServletRequest) servletRequest);
         HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
-        session.setAttribute("newUser",true);
+        session.setAttribute("newuser",true);
         filterChain.doFilter(wrappedRequest,servletResponse);
     }
 

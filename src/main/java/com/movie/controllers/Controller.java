@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletRequest;
@@ -87,4 +88,20 @@ public class Controller {
         session.getAttribute("username");
 
     }
+    
+    @RequestMapping( value = "/newuser",method = RequestMethod.PUT)
+    @ResponseBody
+    public Integer insertUser(ServletRequest servletRequest, ServletResponse servletResponse){
+    	
+        HttpResettableServletRequest wrappedRequest = new HttpResettableServletRequest((HttpServletRequest) servletRequest);
+        
+       String userName= wrappedRequest.getParameter("userName");
+       String pass= wrappedRequest.getParameter("pass");
+       String fName = wrappedRequest.getParameter("fName");
+       String lName = wrappedRequest.getParameter("lName");
+       dataManager.insertUser(userName, pass, fName, lName);
+       return 1;
+        
+    }
+    
 }

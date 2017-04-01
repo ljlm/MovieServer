@@ -141,5 +141,15 @@ public class DataManager {
         return (Integer) raters.get(0).get("raters");
 
     }
+    
+    public  Integer insertUser (String userName , String pass,String fName ,String lName ){
+    	  String inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,credits) VALUES (?, ?, ?, ?,?) ";
+          int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER};
+
+          Object[] params = new Object[] { userName,pass,fName, lName,0};
+          dbManager.insertQuery(inserQuery, params, types);
+        return (1);
+
+    }
 
 }
