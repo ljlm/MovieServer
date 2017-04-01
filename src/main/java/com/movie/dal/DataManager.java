@@ -98,47 +98,47 @@ public class DataManager {
         return 0;
     }
 
-//TODO fix it
-    public Map<String, Object> updateMovieRating (int movieId,  int user_id ,int rating ) throws Exception {
-        if (attemptToLockLine("movieserverdb.movies", movieId )){
-            if (attemptToLockLine("movieserverdb.movies", movieId)
-        }
-
-        try {
-            String query = ("UPDATE movieserverdb.movies SET locked=1 WHERE id=" + movieId + " && locked=0" + PRIVATE_LOCK);
-            if (dbManager.updateQuery(query) != 1) {
-                query = ("SELECT * movieserverdb.movies WHERE id=" + movieId + " " + SHARED_LOCK);
-                if (dbManager.updateQuery(query) == 1) {
-                    Thread.sleep(new Random().nextInt(150)+150);
-                    return updateMovieRating ( movieId,   user_id , rating );
-                }
-//                no such line. need to create
-
-            }
-            else{
-
-            }
-            String query2 = ("SELECT * FROM movieserverdb.movies WHERE id=" + movieId + " ;");
-            List<Map<String, Object>> movies = jdbcTemplate.queryForList(query2);
-            if (movies.size() == 1) {
-                int raters = (Integer) movies.get(0).get("raters") + 1;
-                String query3 = ("UPDATE movieserverdb.movies SET raters=" + raters + " && rating= " + rating + " WHERE id=" + movieId + PRIVATE_LOCK);
-                int res2 = jdbcTemplate.update(query);
-                System.out.println(res2);
-                String query4 = ("UPDATE movieserverdb.movies SET locked=0 WHERE id=" + movieId + " && locked=1" + PRIVATE_LOCK);
-                int res3 = jdbcTemplate.update(query);
-
-
-            } else {
-//            TODO retry
-            }
-
-            return null;
-        }
-        catch (Exception ex){
-            throw new Exception ();
-        }
-    }
+////TODO fix it
+//    public Map<String, Object> updateMovieRating (int movieId,  int user_id ,int rating ) throws Exception {
+//        if (attemptToLockLine("movieserverdb.movies", movieId )){
+//            if (attemptToLockLine("movieserverdb.movies", movieId)
+//        }
+//
+//        try {
+//            String query = ("UPDATE movieserverdb.movies SET locked=1 WHERE id=" + movieId + " && locked=0" + PRIVATE_LOCK);
+//            if (dbManager.updateQuery(query) != 1) {
+//                query = ("SELECT * movieserverdb.movies WHERE id=" + movieId + " " + SHARED_LOCK);
+//                if (dbManager.updateQuery(query) == 1) {
+//                    Thread.sleep(new Random().nextInt(150)+150);
+//                    return updateMovieRating ( movieId,   user_id , rating );
+//                }
+////                no such line. need to create
+//
+//            }
+//            else{
+//
+//            }
+//            String query2 = ("SELECT * FROM movieserverdb.movies WHERE id=" + movieId + " ;");
+//            List<Map<String, Object>> movies = jdbcTemplate.queryForList(query2);
+//            if (movies.size() == 1) {
+//                int raters = (Integer) movies.get(0).get("raters") + 1;
+//                String query3 = ("UPDATE movieserverdb.movies SET raters=" + raters + " && rating= " + rating + " WHERE id=" + movieId + PRIVATE_LOCK);
+//                int res2 = jdbcTemplate.update(query);
+//                System.out.println(res2);
+//                String query4 = ("UPDATE movieserverdb.movies SET locked=0 WHERE id=" + movieId + " && locked=1" + PRIVATE_LOCK);
+//                int res3 = jdbcTemplate.update(query);
+//
+//
+//            } else {
+////            TODO retry
+//            }
+//
+//            return null;
+//        }
+//        catch (Exception ex){
+//            throw new Exception ();
+//        }
+//    }
 
     private boolean attemptToLockLine (String db, int id){
         String updateQuery = ("UPDATE "+ db +" SET locked=1 WHERE id=" + id + " && locked=0" + PRIVATE_LOCK);
