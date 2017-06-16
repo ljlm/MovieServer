@@ -13,15 +13,28 @@ import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Created by lionelm on 2/25/2017.
  */
 @EnableAutoConfiguration
 @Service
-@Component
+
 
 
 public class DataManager {
+	private static DataManager SelfRef =null;
+	public static DataManager getDataManager(){
+		
+		return SelfRef;
+		
+	}
+	@PostConstruct
+	public void init(){
+		SelfRef=this;
+		
+	}
 
     @Autowired
     public DBManager dbManager;
@@ -129,6 +142,7 @@ public class DataManager {
         Object[] params = new Object[] { userName,pass,fName, lName,0};
         dbManager.insertQuery(inserQuery, params, types);
         return 1;
+        
 
     }
 
