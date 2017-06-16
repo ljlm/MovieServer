@@ -9,6 +9,8 @@ import java.io.IOException;
 /**
  * Created by lionelm on 3/15/2017.
  */
+
+
 public class NewUserFilter implements Filter {
 
     @Override
@@ -23,6 +25,7 @@ public class NewUserFilter implements Filter {
         session.setAttribute("newuser",true);
         filterChain.doFilter(wrappedRequest,servletResponse);
     }
+
 
     @Override
     public void destroy() {

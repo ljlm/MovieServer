@@ -20,6 +20,9 @@ import java.util.Map;
 @EnableAutoConfiguration
 @RestController
 
+//TODO handle errors
+
+
 public class Controller {
 
     @Autowired
@@ -27,9 +30,7 @@ public class Controller {
 
 
     @RequestMapping(value = "/movies", method = RequestMethod.GET)
-    public List getMovies(ServletRequest servletRequest){
-        HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
-        System.out.println(session.getAttributeNames().toString());
+    public List getMovies(){
         return dataManager.getMovieList();
     }
 
@@ -49,11 +50,6 @@ public class Controller {
         return dataManager.getMovieComments(movieID);
     }
 
-//    TODO FIX
-    @RequestMapping(value = "/movies/{movieID}/{rating}", method = RequestMethod.GET)
-    public String AddMovieRating(@PathVariable Integer movieID,@PathVariable Integer rating){
-        return "User rated movie "+movieID+" as "+rating;
-    }
 
     //    DBManager.getMovieListByCategory
     @RequestMapping(value = "/movies/categories/{categoryId}", method = RequestMethod.GET)
@@ -69,13 +65,8 @@ public class Controller {
 
 
     @RequestMapping(value = "/ratings/{userId}/{movieId}/{rating}", method = RequestMethod.PUT)
-    public String updateMovieRating (@PathVariable Integer movieId, @PathVariable Integer userId, @PathVariable Integer rating){
-//        dbManager.getMovieRatingByUser(movieId, userId);
-//        dataManager.unrateMovie(movieId,userId);
-//        return dbManager.updateMovieRating( movieId,  userId,  rating)+"";
-//        dataManager.rateMovie(movieId, userId);
-
-        return "SOMETHING";
+    public void updateMovieRating (@PathVariable Integer movieId, @PathVariable Integer userId, @PathVariable Integer rating){
+         dataManager.updateMovieRating(movieId,userId,rating);
     }
 
     @RequestMapping( method = RequestMethod.GET)
@@ -86,20 +77,22 @@ public class Controller {
         session.getAttribute("username");
 
     }
-    
+
+
+
+
+
     @RequestMapping( value = "/newuser",method = RequestMethod.PUT)
     @ResponseBody
     public Integer insertUser(ServletRequest servletRequest, ServletResponse servletResponse){
-    	
         HttpResettableServletRequest wrappedRequest = new HttpResettableServletRequest((HttpServletRequest) servletRequest);
-        
-       String userName= wrappedRequest.getParameter("userName");
-       String pass= wrappedRequest.getParameter("pass");
-       String fName = wrappedRequest.getParameter("fName");
-       String lName = wrappedRequest.getParameter("lName");
-       dataManager.insertUser(userName, pass, fName, lName);
-       return 1;
-        
+        String userName= wrappedRequest.getParameter("userName");
+        String pass= wrappedRequest.getParameter("pass");
+        String fName = wrappedRequest.getParameter("fName");
+        String lName = wrappedRequest.getParameter("lName");
+        dataManager.insertUser(userName, pass, fName, lName);
+        return 1;
+
     }
-    
+
 }

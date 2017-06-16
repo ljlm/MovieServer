@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -13,9 +16,8 @@ import java.util.List;
  */
 @EnableAutoConfiguration
 @Service
+
 public class DBManager {
-    private static final String SHARED_LOCK =" LOCK IN SHARE MODE;";
-    private static final String PRIVATE_LOCK=" FOR UPDATE;";
 
 
     @Autowired
@@ -37,6 +39,39 @@ public class DBManager {
         jdbcTemplate.execute(query);
     }
 
+
+
+
+    public static Connection getDBConnection() {
+
+        Connection dbConnection = null;
+
+        try {
+
+            Class.forName("jdbc:mysql:@localhost:3306:movieserverdb");
+
+        } catch (ClassNotFoundException e) {
+
+            System.out.println(e.getMessage());
+
+        }
+//spring.datasource.url= jdbc:mysql://localhost:3306/movieserverdb
+//        spring.datasource.username=root
+//        spring.datasource.password=root
+        try {
+
+            dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieserverdb", "root", "root");
+            return dbConnection;
+
+        } catch (SQLException e) {
+
+            System.out.println(e.getMessage());
+
+        }
+
+        return dbConnection;
+
+    }
 
 
 }
