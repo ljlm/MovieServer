@@ -24,20 +24,26 @@ import javax.annotation.PostConstruct;
 
 
 public class DataManager {
+
+    @Autowired
+    public DBManager dbManager;
+
+
 	private static DataManager SelfRef =null;
 	public static DataManager getDataManager(){
 		
 		return SelfRef;
 		
 	}
+
+
 	@PostConstruct
 	public void init(){
 		SelfRef=this;
 		
 	}
 
-    @Autowired
-    public DBManager dbManager;
+
 
 
 
@@ -159,13 +165,13 @@ public class DataManager {
     }
 
 
-    public void calculateMoviesRating () {
-        List<Map<String,Object>> movies = getMovieList ();
-        for (int i=0; i< movies.size() ; i++){
-            movies.get(i)
-        }
-
-
-    }
+//    public void calculateMoviesRating () {
+//        List<Map<String,Object>> movies = getMovieList ();
+//        for (int i=0; i< movies.size() ; i++){
+//            movies.get(i)
+//        }
+//
+//
+//    }
 
 }
