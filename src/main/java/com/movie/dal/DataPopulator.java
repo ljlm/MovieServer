@@ -20,6 +20,7 @@ public class DataPopulator {
     public DBManager dbManager;
 
      public void createTables(){
+     
         dbManager.executeQuery("drop table if exists users ");
         dbManager.executeQuery("CREATE TABLE users(id int NOT NULL AUTO_INCREMENT " +
                 ",user_name VARCHAR(255) NOT NULL , password VARCHAR(255) NOT NULL  " +
@@ -37,6 +38,32 @@ public class DataPopulator {
          params = new Object[] { "tiggermina","tiggermina","tiger", "mina",0,0};
          dbManager.insertQuery(inserQuery, params, types);
 
+    //insert rated movies table
+         
+         
+    	 dbManager.executeQuery("drop table if exists rented_movies ");
+    	 dbManager.executeQuery("CREATE TABLE users(id int NOT NULL AUTO_INCREMENT " +
+    	                ",user_id int NOT NULL , movie_id int NOT NULL  " +
+    	                ", rented_date DATE NOT NULL, return_date DATE NOT NULL,PRIMARY KEY (id))");
+    					
+    					
+    					 inserQuery = "INSERT INTO users (user_id, movie_id, rented_date, return_date) VALUES (?, ?, ?, ?) ";
+    					  types = new int[] { Types.INTEGER,Types.INTEGER, Types.DATE, Types.DATE };
+    					   params = new Object[] { 1,1,"2014-01-28", "2014-01-28"};
+    					  dbManager.insertQuery(inserQuery, params, types);
+         
+         //end of rated movie table 
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
          dbManager.executeQuery("drop table if exists  movies");
          dbManager.executeQuery("CREATE TABLE movies(" +
                  "id int NOT NULL AUTO_INCREMENT ,movie_name VARCHAR(255) , year int, category int, info VARCHAR(1027) , rating FLOAT ,raters int,available int,locked int,PRIMARY KEY (id))");

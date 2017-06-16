@@ -18,26 +18,26 @@ public class FilterRegistrator {
     @Autowired
     public DataManager dataManager;
 
-    @Bean
-    public FilterRegistrationBean authenticationFilter(){
-        FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
-        filterRegBean.setFilter(new AuthenticationFilter(dataManager));
-        List<String> urlPatterns = new ArrayList<>();
-        urlPatterns.add( "/*");
-        filterRegBean.setUrlPatterns(urlPatterns);
-        filterRegBean.setOrder(1);
-        return filterRegBean;
-    }
-
-    @Bean
-    public FilterRegistrationBean newUserFilter(){
-        FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
-        filterRegBean.setFilter(new NewUserFilter());
-        List<String> urlPatterns = new ArrayList<>();
-        urlPatterns.add("/newuser");
-        filterRegBean.setUrlPatterns(urlPatterns);
-        filterRegBean.setOrder(0);
-        return filterRegBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean authenticationFilter(){
+//        FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
+//        filterRegBean.setFilter(new AuthenticationFilter(dataManager));
+//        List<String> urlPatterns = new ArrayList<>();
+//        urlPatterns.add( "/*");
+//        filterRegBean.setUrlPatterns(urlPatterns);
+//        filterRegBean.setOrder(1);
+//        return filterRegBean;
+//    }
+//
+//    @Bean
+//    public FilterRegistrationBean newUserFilter(){
+//        FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
+//        filterRegBean.setFilter(new NewUserFilter());
+//        List<String> urlPatterns = new ArrayList<>();
+//        urlPatterns.add("/newuser");
+//        filterRegBean.setUrlPatterns(urlPatterns);
+//        filterRegBean.setOrder(0);
+//        return filterRegBean;
+//    }
 
 }

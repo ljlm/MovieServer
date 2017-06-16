@@ -22,6 +22,7 @@ public class NewUserFilter implements Filter {
         HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
         session.setAttribute("newuser",true);
         filterChain.doFilter(wrappedRequest,servletResponse);
+        
     }
 
     @Override
