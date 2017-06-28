@@ -1,5 +1,6 @@
 package com.movie.dal;
 
+import com.movie.Tools.Calculator;
 import com.movie.dil.DataIntegrity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,22 +30,19 @@ public class DataManager {
     public DBManager dbManager;
 
 
-	private static DataManager SelfRef =null;
-	public static DataManager getDataManager(){
-		
-		return SelfRef;
-		
-	}
+    private static DataManager SelfRef =null;
+    public static DataManager getDataManager(){
+
+        return SelfRef;
+
+    }
 
 
-	@PostConstruct
-	public void init(){
-		SelfRef=this;
-		
-	}
+    @PostConstruct
+    public void init(){
+        SelfRef=this;
 
-
-
+    }
 
 
     public List<Map<String,Object>> getMovieList (){
@@ -84,10 +82,7 @@ public class DataManager {
     }
 
     public  void updateMovieRating (Integer movieId, Integer userId, Integer rating){
-
         StringBuilder selectLinequery = new StringBuilder();
-
-
         selectLinequery.append("SELECT * FROM movieserverdb.rating WHERE user_id=").append(userId).append(" && movie_id=").append(movieId).append(";");
         if (lineExists(selectLinequery.toString())){
             StringBuilder updateLineQuery = new StringBuilder();
@@ -148,7 +143,7 @@ public class DataManager {
         Object[] params = new Object[] { userName,pass,fName, lName,0};
         dbManager.insertQuery(inserQuery, params, types);
         return 1;
-        
+
 
     }
 
@@ -161,17 +156,61 @@ public class DataManager {
                 return (Integer) user.get("id");
             }
         }
+
         return -1;
     }
 
+    public void calculateMoviesRating(){
+        List<String> movieIds = getMovieIds ();
+        try {
+            for (String id : movieIds) {
+                List<Integer> movieRatings = getMovieRatings(Integer.parseInt(id));
+                float rating = Calculator.movieRatingCalculator(movieRatings);
+                System.out.println("rating of movieid=" + id + " is [" + rating + "]");
+                updateMovieRating(Integer.parseInt(id), rating);
+            }
+        }
+        catch (Exception e){
+            System.out.println("unable to update the ratings " + e);
+        }
+    }
 
-//    public void calculateMoviesRating () {
-//        List<Map<String,Object>> movies = getMovieList ();
-//        for (int i=0; i< movies.size() ; i++){
-//            movies.get(i)
-//        }
-//
-//
-//    }
+    public void updateMovieRating (Integer movieID, Float rating) throws Exception {
+        StringBuilder selectLinequery = new StringBuilder();
+        selectLinequery.append("SELECT * FROM movieserverdb.movies WHERE id=").append(movieID).append(";");
+        if (lineExists(selectLinequery.toString())){
+            StringBuilder updateLineQuery = new StringBuilder();
+            lockLine("movieserverdb.movies", "id="+movieID   );
+            updateLineQuery.append("UPDATE movieserverdb.movies SET rating=").append(rating).append(" WHERE id=").append(movieID).append(" && locked=1;");
+            dbManager.updateQuery(updateLineQuery.toString());
+            unlockLine("movieserverdb.movies", "id=" + movieID );
+            return;
+        }
+        throw new Exception("Line was not found on DB");
+
+    }
+
+    public List<String> getMovieIds (){
+        List<Map<String,Object>> movies = getMovieList ();
+        List<String> movieIds = new ArrayList<>();
+        for ( Map <String,Object> movie : movies  ){
+            movieIds.add ("" + movie.get("id"));
+        }
+        return movieIds;
+    }
+
+
+    public List<Integer> getMovieRatings(Integer movieID){
+        List<Map<String, Object>> movieComments =  getMovieComments(movieID );
+        List<Integer> movieRatings = new ArrayList<>();
+        for (Map<String, Object> comment : movieComments){
+            Integer rating =(Integer) ((Map) comment.get("comment")).get("rating");
+            movieRatings.add(rating);
+        }
+        return movieRatings;
+    }
+
+
+
 
 }

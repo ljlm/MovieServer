@@ -26,11 +26,11 @@ public class DataIntegrity {
 
 
     @Autowired
-    public DataManager dbManager;
+    public DataManager dataManager;
 
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
-        dbManager.calculateMoviesRating ();
+        dataManager.calculateMoviesRating ();
     }
 
 
