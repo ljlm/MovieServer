@@ -82,15 +82,11 @@ public class Controller {
 
 
 
-    @RequestMapping( value = "/newuser",method = RequestMethod.PUT)
+    @RequestMapping( value = "/newuser",method = RequestMethod.POST)
     @ResponseBody
     public Integer insertUser(ServletRequest servletRequest, ServletResponse servletResponse){
-        HttpResettableServletRequest wrappedRequest = new HttpResettableServletRequest((HttpServletRequest) servletRequest);
-        String userName= wrappedRequest.getParameter("userName");
-        String pass= wrappedRequest.getParameter("pass");
-        String fName = wrappedRequest.getParameter("fName");
-        String lName = wrappedRequest.getParameter("lName");
-        dataManager.insertUser(userName, pass, fName, lName);
+       
+   
         return 1;
 
     }
