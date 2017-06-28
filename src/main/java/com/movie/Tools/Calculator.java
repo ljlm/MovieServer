@@ -8,12 +8,13 @@ import java.util.List;
 public class Calculator {
 
 
-    public static Float movieRatingCalculator ( List<Integer> movieRatings){
+    public static String movieRatingCalculator ( List<Integer> movieRatings){
         float avg = 0;
         for (Integer movieRating : movieRatings){
             avg = avg +movieRating;
         }
-        return avg / (float) movieRatings.size();
+        avg= avg / (float) movieRatings.size();
+        return avg == avg ? avg + "" : "0.0";
 
     }
 

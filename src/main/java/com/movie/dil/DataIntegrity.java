@@ -28,7 +28,7 @@ public class DataIntegrity {
     @Autowired
     public DataManager dataManager;
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 3600000)
     public void reportCurrentTime() {
         dataManager.calculateMoviesRating ();
     }

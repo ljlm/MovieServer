@@ -165,9 +165,9 @@ public class DataManager {
         try {
             for (String id : movieIds) {
                 List<Integer> movieRatings = getMovieRatings(Integer.parseInt(id));
-                float rating = Calculator.movieRatingCalculator(movieRatings);
+                String rating = Calculator.movieRatingCalculator(movieRatings);
                 System.out.println("rating of movieid=" + id + " is [" + rating + "]");
-                updateMovieRating(Integer.parseInt(id), rating);
+                updateMovieRating(Integer.parseInt(id), rating,movieRatings.size());
             }
         }
         catch (Exception e){
@@ -175,13 +175,13 @@ public class DataManager {
         }
     }
 
-    public void updateMovieRating (Integer movieID, Float rating) throws Exception {
+    public void updateMovieRating (Integer movieID, String rating, int raters) throws Exception {
         StringBuilder selectLinequery = new StringBuilder();
         selectLinequery.append("SELECT * FROM movieserverdb.movies WHERE id=").append(movieID).append(";");
         if (lineExists(selectLinequery.toString())){
             StringBuilder updateLineQuery = new StringBuilder();
             lockLine("movieserverdb.movies", "id="+movieID   );
-            updateLineQuery.append("UPDATE movieserverdb.movies SET rating=").append(rating).append(" WHERE id=").append(movieID).append(" && locked=1;");
+            updateLineQuery.append("UPDATE movieserverdb.movies SET rating=").append(rating).append(" , raters=").append(raters).append(" WHERE id=").append(movieID).append(" && locked=1;");
             dbManager.updateQuery(updateLineQuery.toString());
             unlockLine("movieserverdb.movies", "id=" + movieID );
             return;
