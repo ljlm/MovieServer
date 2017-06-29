@@ -1,6 +1,6 @@
 package com.movie.controllers;
 
-import com.movie.dal.DataManager;
+import com.movie.services.DataManager;
 import com.movie.filters.HttpResettableServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -15,7 +15,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 
 @EnableAutoConfiguration
 @RestController
@@ -29,45 +28,16 @@ public class Controller {
     public DataManager dataManager;
 
 
-    @RequestMapping(value = "/movies", method = RequestMethod.GET)
-    public List getMovies(){
-        return dataManager.getMovieList();
-    }
-
-    @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
-    public Map<String, Object> getMoviesById(@PathVariable Integer movieID){
-        return dataManager.getMovieById(movieID);
-    }
-
-    @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
-    public Map<String, Object> getUserById(@PathVariable Integer userId){
-        return dataManager.getUserById(userId);
-    }
-
-
-    @RequestMapping(value = "/comments/{movieID}", method = RequestMethod.GET)
-    public List getMoviesComments(@PathVariable Integer movieID){
-        return dataManager.getMovieComments(movieID);
-    }
 
 
     //    DBManager.getMovieListByCategory
-    @RequestMapping(value = "/movies/categories/{categoryId}", method = RequestMethod.GET)
-    public List getMoviesByCategory(@PathVariable Integer categoryId){
-        return dataManager.getMovieByCategory(categoryId);
-    }
+
 //    getTopTenMovies() return array of array list movies {Id of movie,name,png url,year,rating,}
 
-    @RequestMapping(value = "/movies/topten", method = RequestMethod.GET)
-    public String getTopTenMovies(){
-        return "List of top 10 movies";
-    }
 
 
-    @RequestMapping(value = "/ratings/{userId}/{movieId}/{rating}", method = RequestMethod.PUT)
-    public void updateMovieRating (@PathVariable Integer movieId, @PathVariable Integer userId, @PathVariable Integer rating){
-         dataManager.updateMovieRating(movieId,userId,rating);
-    }
+
+
 
     @RequestMapping( method = RequestMethod.GET)
     public void startSession(ServletRequest servletRequest, ServletResponse servletResponse){

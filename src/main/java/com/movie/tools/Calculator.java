@@ -1,4 +1,4 @@
-package com.movie.Tools;
+package com.movie.tools;
 
 import java.util.List;
 

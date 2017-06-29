@@ -1,6 +1,6 @@
 package com.movie.filters;
 
-import com.movie.dal.DataManager;
+import com.movie.services.DataManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +15,8 @@ import java.util.List;
 @Component
 public class FilterRegistrator {
 
-    @Autowired
-    public DataManager dataManager;
+//    @Autowired
+//    public DataManager dataManager;
 
 //    @Bean
 //    public FilterRegistrationBean authenticationFilter(){

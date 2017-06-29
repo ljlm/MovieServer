@@ -1,6 +1,9 @@
-package com.movie.dal;
+package com.movie.services;
 
-import com.movie.Tools.Categories;
+import com.movie.dal.DBManager;
+import com.movie.tools.Categories;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
@@ -17,19 +20,55 @@ import java.sql.Types;
 public class DataPopulator {
 
     @Autowired
-    public DBManager dbManager;
-
+    private DBManager dbManager;
+    private static final Logger logger = LoggerFactory.getLogger(DataPopulator.class);
+//    TODO CONSTANTS AND LOGS
      public void createTables(){
-     
+      dbManager.executeQuery("drop table if exists categories ");
+      dbManager.executeQuery("CREATE TABLE categories(id int NOT NULL  " +
+              ",category_name VARCHAR(255) NOT NULL "+
+              ",PRIMARY KEY (id))");
+      String inserQuery = "INSERT INTO categories (id , category_name) VALUES (?, ?) ";
+      int[] types = new int[] { Types.INTEGER,Types.VARCHAR};
+      Object[] params = new Object[] { 9,"horror"};
+      dbManager.insertQuery(inserQuery, params, types);
+
+      params = new Object[] { 1,"crime"};
+      dbManager.insertQuery(inserQuery, params, types);
+
+      params = new Object[] { 2,"adventure"};
+      dbManager.insertQuery(inserQuery, params, types);
+
+      params = new Object[] { 3,"action"};
+      dbManager.insertQuery(inserQuery, params, types);
+
+      params = new Object[] { 4,"drama"};
+      dbManager.insertQuery(inserQuery, params, types);
+
+
+      params = new Object[] { 5,"documentary"};
+      dbManager.insertQuery(inserQuery, params, types);
+
+      params = new Object[] { 6,"animation"};
+      dbManager.insertQuery(inserQuery, params, types);
+
+      params = new Object[] { 7,"comedy"};
+      dbManager.insertQuery(inserQuery, params, types);
+
+
+      params = new Object[] { 8,"thriller"};
+      dbManager.insertQuery(inserQuery, params, types);
+
+
         dbManager.executeQuery("drop table if exists users ");
         dbManager.executeQuery("CREATE TABLE users(id int NOT NULL AUTO_INCREMENT " +
                 ",user_name VARCHAR(255) NOT NULL , password VARCHAR(255) NOT NULL  " +
                 ", first_name VARCHAR(255), last_name VARCHAR(255),credits int, locked int" +
                 ",PRIMARY KEY (id))");
-         String inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,credits,locked) VALUES (?, ?, ?, ?,?,?) ";
-         int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER,Types.INTEGER};
+          inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,credits,locked) VALUES (?, ?, ?, ?,?,?) ";
+          types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER,Types.INTEGER};
 
-         Object[] params = new Object[] { "lionelmina","lionelmina","Lionel", "mina",0,0};
+         params = new Object[] { "lionelmina","lionelmina","Lionel", "mina",0,0};
          dbManager.insertQuery(inserQuery, params, types);
 
          params = new Object[] { "elilevi","elilevi","eli", "levi",0,0};

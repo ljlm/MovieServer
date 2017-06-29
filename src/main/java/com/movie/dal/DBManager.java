@@ -4,6 +4,7 @@ package com.movie.dal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -14,8 +15,8 @@ import java.util.List;
 /**
  * Created by lionelm on 1/7/2017.
  */
-@EnableAutoConfiguration
-@Service
+
+@Repository
 
 public class DBManager {
 

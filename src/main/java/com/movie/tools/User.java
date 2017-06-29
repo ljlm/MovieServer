@@ -1,4 +1,4 @@
-package com.movie.Tools;
+package com.movie.tools;
 
 /**
  * Created by lionelm on 1/7/2017.

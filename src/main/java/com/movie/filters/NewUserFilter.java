@@ -4,7 +4,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.movie.dal.DataManager;
+import com.movie.services.DataManager;
 
 import java.io.IOException;
 
@@ -31,10 +31,7 @@ public class NewUserFilter implements Filter {
         String pass= wrappedRequest.getParameter("password");
         String fName = wrappedRequest.getParameter("firstname");
         String lName = wrappedRequest.getParameter("lastname");
-        DataManager db= DataManager.getDataManager();
-       
-    
-      db.insertUser(userName, pass, fName, lName);
+        DataManager.getUserDataManager().insertUser(userName, pass, fName, lName);
         
     }
 

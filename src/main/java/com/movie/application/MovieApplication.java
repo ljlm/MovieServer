@@ -1,0 +1,92 @@
+package com.movie.application;
+
+import com.movie.services.DataManager;
+import com.movie.services.DataPopulator;
+import com.movie.services.LocksService;
+import com.movie.tools.Calculator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by lionelm on 6/28/2017.
+ */
+
+@Component
+public class MovieApplication {
+    @Autowired
+    private ReviewApplication reviewApplication;
+
+    private static final Logger logger = LoggerFactory.getLogger(MovieApplication.class);
+
+    public List<Map<String,Object>> getMovieList (){
+        return DataManager.getMovieDataService().getMovieList();
+    }
+
+    public  Map<String, Object> getMovieById (int id){
+        return DataManager.getMovieDataService().getMovieById(id);
+    }
+
+    public  List<Map<String, Object>> getMovieByCategory (int category){
+      return DataManager.getMovieDataService().getMovieByCategory(category);
+    }
+
+    public  List<String> getCategories (){
+        return DataManager.getMovieDataService().getCategories();
+    }
+
+    public List<String> getMovieIds (){
+        List<Map<String,Object>> movies = getMovieList ();
+        List<String> movieIds = new ArrayList<>();
+        for ( Map <String,Object> movie : movies  ){
+            movieIds.add ("" + movie.get("id"));
+        }
+        return movieIds;
+    }
+
+
+
+    public void calculateMoviesRating(){
+        logger.debug("Starting rating calculation and updating process");
+        List<String> movieIds = getMovieIds ();
+        try {
+            for (String id : movieIds) {
+                List<Integer> movieRatings = getMovieRatings(Integer.parseInt(id));
+                String rating = Calculator.movieRatingCalculator(movieRatings);
+                System.out.println("rating of movieid=" + id + " is [" + rating + "]");
+                logger.debug("Rating of  movieid=" + id + " is [" + rating + "]");
+                updateMovieRating(Integer.parseInt(id), rating,movieRatings.size());
+            }
+        }
+        catch (Exception e){
+            System.out.println("unable to update the ratings " + e);
+        }
+    }
+
+    public List<Integer> getMovieRatings(Integer movieID){
+        List<Map<String, Object>> movieComments =  reviewApplication.getReviewsByMovieId(movieID );
+        List<Integer> movieRatings = new ArrayList<>();
+        for (Map<String, Object> comment : movieComments){
+            Integer rating = (Integer) ((Map) comment.get("comment")).get("rating");
+            movieRatings.add(rating);
+        }
+        return movieRatings;
+    }
+
+    public void updateMovieRating (Integer movieID, String rating, int raters) throws Exception {
+        DataManager.getMovieDataService().updateMovieRating(movieID,rating,raters);
+
+    }
+
+
+    public boolean leaseMovie (int movieId, int userId){
+        return false;
+    }
+
+
+}

@@ -1,6 +1,6 @@
 package com.movie.filters;
 
-import com.movie.dal.DataManager;
+import com.movie.services.DataManager;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +38,7 @@ public class AuthenticationFilter implements Filter {
         String userpass = new String(userpassBase64, "utf-8");
         String username = userpass.split(":")[0];
         String password = userpass.split(":")[1];
-        int userId = dataManager.getUserIdIfExists(username, password);
+        int userId = DataManager.getUserDataManager().getUserIdIfExists(username, password);
         if (userId > -1){
             session.setAttribute("userName",username);
             session.setAttribute("userId",userId);

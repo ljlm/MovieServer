@@ -1,6 +1,6 @@
 package com.movie.controllers;
 
-import com.movie.dal.DataPopulator;
+import com.movie.services.DataPopulator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
