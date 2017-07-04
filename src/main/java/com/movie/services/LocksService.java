@@ -1,6 +1,8 @@
 package com.movie.services;
 
 import com.movie.dal.DBManager;
+import com.movie.tools.DBRowLockerData;
+import com.movie.tools.DBRowUpdateData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.movie.tools.constants.DBConstants.UPDATE_;
-import static com.movie.tools.constants.DBConstants._EOL;
-import static com.movie.tools.constants.DBConstants._WHERE_;
+import static com.movie.tools.constants.DBConstants.*;
 
 /**
  * Created by lionelm on 6/28/2017.
@@ -43,9 +43,114 @@ public class LocksService {
         }
         return false;
     }
+
+    public static boolean lineExists (String dbName, String whereStatement){
+        String query = SELECT_ALL_FROM_ + dbName + _WHERE_ +whereStatement +_EOL;
+                List list;
+        if ( (list = dbManager.queryForList(query)) != null && list.size()>0) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public static boolean isLineLocked (String dbName, String whereStatement){
+        String query = SELECT_ALL_FROM_ + dbName + _WHERE_ +whereStatement + _AND_LOCKEDe+"1"+ _EOL;
+        List list;
+        if ( (list = dbManager.queryForList(query)) != null && list.size()>0) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean lockMultipleRowsAndSetRow(List<DBRowLockerData> rowsToLock , DBRowUpdateData rowToUpdate ){
+        if (lockMultipleRows(rowsToLock)){
+            if (setRow(rowToUpdate)){
+                unlockMultipleRows(rowsToLock);
+                return true;
+            }
+            unlockMultipleRows(rowsToLock);
+            return false;
+        }
+        return false;
+
+    }
+
+
+
+
+    public static boolean setRow (DBRowUpdateData rowBlockerData){
+        int retryCounter=0;
+        boolean lineLocked ;
+        if (lineExists(rowBlockerData.getDbName(),rowBlockerData.getWhereStatement())) {
+            while (retryCounter < 3) {
+                lineLocked = lockLine(rowBlockerData.getDbName(), rowBlockerData.getWhereStatement());
+                retryCounter++;
+                if (lineLocked) {
+                    String setQuery = "UPDATE " + rowBlockerData.getDbName() + " SET " + rowBlockerData.getSetStatement() + " WHERE " + rowBlockerData.getWhereStatement() + ";";
+                    if (dbManager.updateQuery(setQuery) > 0) {
+                        unlockLine(rowBlockerData.getDbName(), rowBlockerData.getWhereStatement());
+                        return true;
+
+                    }
+                    unlockLine(rowBlockerData.getDbName(), rowBlockerData.getWhereStatement());
+                    return false;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    public static boolean setLockedRow (DBRowUpdateData rowBlockerData){
+        if (isLineLocked(rowBlockerData.getDbName(),rowBlockerData.getWhereStatement())){
+            String setQuery = "UPDATE " + rowBlockerData.getDbName() + " SET " + rowBlockerData.getSetStatement() + " WHERE " + rowBlockerData.getWhereStatement() + ";";
+            if (dbManager.updateQuery(setQuery) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public static boolean lockMultipleRows(List<DBRowLockerData> rows){
+        boolean isSucessful= true;
+        for (DBRowLockerData rowData : rows){
+            if (lineExists(rowData.getDbName(),rowData.getWhereStatement()) && lockLine(rowData.getDbName(),rowData.getWhereStatement() )){
+                isSucessful = isSucessful && true;
+            }
+            else {
+                isSucessful = isSucessful && false;
+            }
+        }
+        if (!isSucessful){
+            handleLockFailure(rows);
+        }
+        return isSucessful;
+    }
+
+
+
+    private static void handleLockFailure (List<DBRowLockerData> rows){
+        logger.error("Fail to lock multiple rows.");
+        unlockMultipleRows( rows);
+    }
+
+
+    public static void unlockMultipleRows(List<DBRowLockerData> rows){
+        for (DBRowLockerData rowData : rows){
+            if (lineExists(rowData.getDbName(),rowData.getWhereStatement()) ){
+                unlockLine(rowData.getDbName(),rowData.getWhereStatement() );
+            }
+        }
+    }
+
+
     public static boolean lockLine (String dbName, String whereStatement){
         return handleLock(true , dbName,whereStatement);
     }
+
+
 
     public static boolean handleLock (boolean lock, String dbName,  String whereStatement){
         StringBuilder handleLockLineQuery = new StringBuilder();
@@ -59,4 +164,6 @@ public class LocksService {
         }
         return false;
     }
+
+
 }

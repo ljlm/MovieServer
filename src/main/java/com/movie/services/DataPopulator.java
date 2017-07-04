@@ -63,33 +63,36 @@ public class DataPopulator {
         dbManager.executeQuery("drop table if exists users ");
         dbManager.executeQuery("CREATE TABLE users(id int NOT NULL AUTO_INCREMENT " +
                 ",user_name VARCHAR(255) NOT NULL , password VARCHAR(255) NOT NULL  " +
-                ", first_name VARCHAR(255), last_name VARCHAR(255),credits int, locked int" +
+                ", first_name VARCHAR(255), last_name VARCHAR(255),role int,credits int, locked int" +
                 ",PRIMARY KEY (id))");
-          inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,credits,locked) VALUES (?, ?, ?, ?,?,?) ";
-          types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER,Types.INTEGER};
+          inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,role ,credits,locked) VALUES (?,?, ?, ?, ?,?,?) ";
+          types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,Types.INTEGER ,Types.INTEGER,Types.INTEGER};
 
-         params = new Object[] { "lionelmina","lionelmina","Lionel", "mina",0,0};
+         params = new Object[] { "lionelmina","lionelmina","Lionel", "mina",0,3,0};
          dbManager.insertQuery(inserQuery, params, types);
 
-         params = new Object[] { "elilevi","elilevi","eli", "levi",0,0};
+         params = new Object[] { "elilevi","elilevi","eli", "levi",0,0,0};
          dbManager.insertQuery(inserQuery, params, types);
 
-         params = new Object[] { "tiggermina","tiggermina","tiger", "mina",0,0};
+         params = new Object[] { "tigger","tigger","tiger", "mina",1,0,0};
          dbManager.insertQuery(inserQuery, params, types);
+
+      params = new Object[] { "helenab","helenab","helena", "bogdzel",1,0,0};
+      dbManager.insertQuery(inserQuery, params, types);
 
     //insert rated movies table
          
          
     	 dbManager.executeQuery("drop table if exists rented_movies ");
-    	 dbManager.executeQuery("CREATE TABLE users(id int NOT NULL AUTO_INCREMENT " +
-    	                ",user_id int NOT NULL , movie_id int NOT NULL  " +
-    	                ", rented_date DATE NOT NULL, return_date DATE NOT NULL,PRIMARY KEY (id))");
+    	 dbManager.executeQuery("CREATE TABLE rented_movies(id int NOT NULL AUTO_INCREMENT " +
+    	                ",user_id int  , movie_id int  " +
+    	                ", rented_date DATE , return_date DATE ,PRIMARY KEY (id))");
     					
     					
-    					 inserQuery = "INSERT INTO users (user_id, movie_id, rented_date, return_date) VALUES (?, ?, ?, ?) ";
-    					  types = new int[] { Types.INTEGER,Types.INTEGER, Types.DATE, Types.DATE };
-    					   params = new Object[] { 1,1,"2014-01-28", "2014-01-28"};
-    					  dbManager.insertQuery(inserQuery, params, types);
+//    					 inserQuery = "INSERT INTO rented_movies (user_id, movie_id, rented_date, return_date) VALUES (?, ?, ?, ?) ";
+//    					  types = new int[] { Types.INTEGER,Types.INTEGER, Types.DATE, Types.DATE };
+//    					   params = new Object[] { 1,1,"2014-01-28", "2014-01-28"};
+//    					  dbManager.insertQuery(inserQuery, params, types);
          
          //end of rated movie table 
          
@@ -109,7 +112,7 @@ public class DataPopulator {
          types = new int[] { Types.VARCHAR,Types.INTEGER, Types.INTEGER,Types.VARCHAR , Types.FLOAT ,Types.INTEGER,Types.INTEGER,Types.INTEGER};
          inserQuery = "INSERT INTO movies (movie_name, year, category, info,rating ,raters ,available,locked ) VALUES (?, ?, ?, ?,?,?,?,?) ";
          params = new Object[] { "City of God",2002, Categories.CRIME,"Two boys growing up in a violent neighborhood" +
-                 "of Rio de Janeiro take different paths: one becomes a photographer, the other a drug dealer.",8.0,1,3,0};
+                 "of Rio de Janeiro take different paths: one becomes a photographer, the other a drug dealer.",0,0,3,0};
          dbManager.insertQuery(inserQuery, params, types);
 
          params = new Object[] { "Requiem for a Dream",2000,Categories.DRAMA,"he drug-induced utopias of four Coney Island people are" +

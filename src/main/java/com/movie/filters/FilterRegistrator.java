@@ -18,16 +18,16 @@ public class FilterRegistrator {
 //    @Autowired
 //    public DataManager dataManager;
 
-//    @Bean
-//    public FilterRegistrationBean authenticationFilter(){
-//        FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
-//        filterRegBean.setFilter(new AuthenticationFilter(dataManager));
-//        List<String> urlPatterns = new ArrayList<>();
-//        urlPatterns.add( "/*");
-//        filterRegBean.setUrlPatterns(urlPatterns);
-//        filterRegBean.setOrder(1);
-//        return filterRegBean;
-//    }
+    @Bean
+    public FilterRegistrationBean authenticationFilter(){
+        FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
+        filterRegBean.setFilter(new AuthenticationFilter());
+        List<String> urlPatterns = new ArrayList<>();
+        urlPatterns.add( "/*");
+        filterRegBean.setUrlPatterns(urlPatterns);
+        filterRegBean.setOrder(1);
+        return filterRegBean;
+    }
 
     @Bean
     public FilterRegistrationBean newUserFilter(){

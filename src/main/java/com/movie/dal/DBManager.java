@@ -41,38 +41,4 @@ public class DBManager {
     }
 
 
-
-
-    public static Connection getDBConnection() {
-
-        Connection dbConnection = null;
-
-        try {
-
-            Class.forName("jdbc:mysql:@localhost:3306:movieserverdb");
-
-        } catch (ClassNotFoundException e) {
-
-            System.out.println(e.getMessage());
-
-        }
-//spring.datasource.url= jdbc:mysql://localhost:3306/movieserverdb
-//        spring.datasource.username=root
-//        spring.datasource.password=root
-        try {
-
-            dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieserverdb", "root", "root");
-            return dbConnection;
-
-        } catch (SQLException e) {
-
-            System.out.println(e.getMessage());
-
-        }
-
-        return dbConnection;
-
-    }
-
-
 }

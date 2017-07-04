@@ -1,11 +1,13 @@
 package com.movie.filters;
 
 import com.movie.services.DataManager;
+import com.movie.tools.ActiveUser;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
 
@@ -16,10 +18,8 @@ import java.util.Base64;
 public class AuthenticationFilter implements Filter {
 
 
-    public DataManager dataManager;
 
-    public AuthenticationFilter(DataManager dataManager){
-        this.dataManager=dataManager;
+    public AuthenticationFilter(){
     }
 
     @Override
@@ -34,21 +34,36 @@ public class AuthenticationFilter implements Filter {
         if (session.getAttribute("newUser") != null){
             filterChain.doFilter(servletRequest,servletResponse);
         }
-        byte[] userpassBase64 = Base64.getDecoder().decode(wrappedRequest.getHeader("authorization").split(" ")[1].getBytes("utf-8"));
+        byte[] userpassBase64 = getRequesAuthenticationHeader(wrappedRequest);
+        validateUserCredentials(userpassBase64,session);
+        filterChain.doFilter(wrappedRequest,servletResponse);
+
+
+    }
+
+    private byte[] getRequesAuthenticationHeader(HttpResettableServletRequest wrappedRequest) throws UnsupportedEncodingException {
+        String requesHeader = wrappedRequest.getHeader("authorization");
+        if (requesHeader!=null){
+            return Base64.getDecoder().decode(requesHeader.split(" ")[1].getBytes("utf-8"));
+        }
+        throw new IllegalArgumentException("Unautorized");
+    }
+
+    private void validateUserCredentials (byte[] userpassBase64, HttpSession session) throws UnsupportedEncodingException {
         String userpass = new String(userpassBase64, "utf-8");
         String username = userpass.split(":")[0];
         String password = userpass.split(":")[1];
         int userId = DataManager.getUserDataManager().getUserIdIfExists(username, password);
         if (userId > -1){
-            session.setAttribute("userName",username);
-            session.setAttribute("userId",userId);
-            filterChain.doFilter(wrappedRequest,servletResponse);
+            ActiveUser activeUser = new ActiveUser(username,userId);
+            session.setAttribute("activeUser", activeUser);
+
         }
         else{
             throw new IllegalArgumentException("Unautorized");
         }
-
     }
+
 
     @Override
     public void destroy() {

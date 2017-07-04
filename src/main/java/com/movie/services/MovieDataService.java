@@ -1,6 +1,7 @@
 package com.movie.services;
 
 import com.movie.dal.DBManager;
+import com.movie.tools.DBRowUpdateData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,18 +39,31 @@ public class MovieDataService {
         return movies;
     }
 
+//    public void updateMovieRating (Integer movieID, String rating, int raters) throws Exception {
+//        StringBuilder selectLinequery = new StringBuilder();
+//        selectLinequery.append("SELECT * FROM movieserverdb.movies WHERE id=").append(movieID).append(";");
+//        if (LocksService.lineExists(selectLinequery.toString()) &&
+//                LocksService.lockLine("movieserverdb.movies", "id="+movieID   )  ){
+//            StringBuilder updateLineQuery = new StringBuilder();
+////            LocksService.lockLine("movieserverdb.movies", "id="+movieID   );
+//            updateLineQuery.append("UPDATE movieserverdb.movies SET rating=").append(rating).append(" , raters=").append(raters).append(" WHERE id=").append(movieID).append(" && locked=1;");
+//            dbManager.updateQuery(updateLineQuery.toString());
+//            LocksService.unlockLine("movieserverdb.movies", "id=" + movieID );
+//            return;
+//        }
+//        throw new Exception("Line was not found on DB");
+//
+//    }
+
     public void updateMovieRating (Integer movieID, String rating, int raters) throws Exception {
-        StringBuilder selectLinequery = new StringBuilder();
-        selectLinequery.append("SELECT * FROM movieserverdb.movies WHERE id=").append(movieID).append(";");
-        if (LocksService.lineExists(selectLinequery.toString())){
-            StringBuilder updateLineQuery = new StringBuilder();
-            LocksService.lockLine("movieserverdb.movies", "id="+movieID   );
-            updateLineQuery.append("UPDATE movieserverdb.movies SET rating=").append(rating).append(" , raters=").append(raters).append(" WHERE id=").append(movieID).append(" && locked=1;");
-            dbManager.updateQuery(updateLineQuery.toString());
-            LocksService.unlockLine("movieserverdb.movies", "id=" + movieID );
-            return;
+        StringBuilder whereStatement = new StringBuilder();
+        whereStatement.append("id=").append(movieID);
+        StringBuilder setStatement = new StringBuilder();
+        setStatement.append("rating=").append(rating).append(" , raters=").append(raters);
+        DBRowUpdateData rowUpdateData = new DBRowUpdateData(" movieserverdb.movies", whereStatement.toString(),setStatement.toString());
+        if (!LocksService.setRow(rowUpdateData)){
+            throw new  Exception("unable to update row");
         }
-        throw new Exception("Line was not found on DB");
 
     }
 

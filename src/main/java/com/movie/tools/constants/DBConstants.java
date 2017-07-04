@@ -9,4 +9,5 @@ public class DBConstants {
     public static final String UPDATE_= "UPDATE ";
     public static final String _EOL=" ;";
     public static final String _IDe=" id=";
+    public static final String _ =" ";
 }

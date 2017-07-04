@@ -2,6 +2,7 @@ package com.movie.controllers;
 
 import com.movie.application.MovieApplication;
 import com.movie.services.DataManager;
+import com.movie.tools.ActiveUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +28,7 @@ public class MovieController {
 
     @RequestMapping(value = "/movies", method = RequestMethod.GET)
     public List getMovies(){
+
         return movieApplication.getMovieList();
     }
 
@@ -49,19 +54,19 @@ public class MovieController {
         return "List of top 10 movies";
     }
     //TODO
-    @RequestMapping( value = "/movies/{movieID}/{userID}", method = RequestMethod.GET)
-    public List getMoviesLeasedByUser (Integer movieId, Integer userId){
+    @RequestMapping( value = "/leaser", method = RequestMethod.GET)
+    public List getMoviesLeasedByUser ( ServletRequest servletRequest){
         return null;
     }
     //TODO
-    @RequestMapping( value = "/movies/{movieID}/{userID}", method = RequestMethod.PUT)
-    public boolean leaseMovie(Integer movieId, Integer userId){
-        return false;
+    @RequestMapping( value = "/leaser/{movieID}", method = RequestMethod.PUT)
+    public boolean leaseMovie(@PathVariable Integer movieID,ServletRequest servletRequest ){
+        return movieApplication.leaseMovie(movieID, ActiveUser.getActiveUserData(servletRequest).getUserId());
     }
     //TODO
-    @RequestMapping( value = "/movies/{movieID}/{userID}", method = RequestMethod.DELETE)
-    public boolean unleaseMovie(Integer movieId, Integer userId){
-        return false;
+    @RequestMapping( value = "/leaser/{movieID}", method = RequestMethod.DELETE)
+    public boolean unleaseMovie(@PathVariable Integer movieID, ServletRequest servletRequest){
+        return movieApplication.unleaseMovie(movieID, ActiveUser.getActiveUserData(servletRequest).getUserId());
     }
 
 
