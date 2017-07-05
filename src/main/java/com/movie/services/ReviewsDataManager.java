@@ -19,6 +19,23 @@ public class ReviewsDataManager {
     public DBManager dbManager;
 
 
+    public void createMovieRating (int userId, int movieId, int rating , String review){
+        String insertQuery = "INSERT INTO rating (user_id ,movie_id, rating, comment,locked) VALUES (?, ?,?,?,? ) ";
+        int[] types = new int[] { Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.VARCHAR,Types.INTEGER};
+        Object[] params = new Object[] { userId, movieId ,rating, review,0};
+        dbManager.insertQuery(insertQuery, params, types);
+    }
+
+    public void deleteMovieRating (int userId, int movieId){
+        dbManager.updateQuery("DELETE FROM movieserverdb.rating WHERE movie_id="+ movieId + "&& user_id="+userId+";");
+    }
+
+    public  Map<String,Object> getUserReviewsByMovieId(int userId, int movieId){
+        List<Map<String,Object>> review = dbManager.queryForList("SELECT * FROM movieserverdb.rating WHERE movie_id="+ movieId + "&& user_id="+userId+";");
+        return review.get(0);
+    }
+
+
     public  void setMovieRating (Integer movieId, Integer userId, Integer rating){
         StringBuilder selectLinequery = new StringBuilder();
         selectLinequery.append("SELECT * FROM movieserverdb.rating WHERE user_id=").append(userId).append(" && movie_id=").append(movieId).append(";");

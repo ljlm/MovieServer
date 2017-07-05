@@ -15,6 +15,7 @@ import static com.movie.tools.constants.DBConstants.*;
 /**
  * Created by lionelm on 6/28/2017.
  */
+
 @Service
 public class LocksService {
 

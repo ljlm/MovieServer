@@ -36,6 +36,7 @@ public class DBManager {
         return jdbcTemplate.update(inserQuery, params, types);
     }
 
+
     public void executeQuery (String query){
         jdbcTemplate.execute(query);
     }

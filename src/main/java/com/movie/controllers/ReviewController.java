@@ -2,6 +2,7 @@ package com.movie.controllers;
 
 import com.movie.application.ReviewApplication;
 import com.movie.services.DataManager;
+import com.movie.tools.ActiveUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -36,10 +40,27 @@ public class ReviewController {
         return reviewApplication.getReviewsByMovieId(movieID);
     }
 
-    @RequestMapping(value = "/ratings/{userId}/{movieId}/{rating}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/reviews/{userId}/{movieId}/{rating}", method = RequestMethod.PUT)
     public void updateMovieRating (@PathVariable Integer movieId, @PathVariable Integer userId, @PathVariable Integer rating){
 //        reviewApplication.updateMovieRating(movieId,userId,rating);
     }
+
+    @RequestMapping(value = "/reviews/{movieId}", method = RequestMethod.POST)
+    public void createMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
+        ActiveUser activeUserData = ActiveUser.getActiveUserData(servletRequest);
+        String comment  =  servletRequest.getParameter("comment");
+        String rating  =  servletRequest.getParameter("rating");
+        reviewApplication.deleteUserReview(activeUserData.getUserId(),movieId);
+        reviewApplication.createUserReview(activeUserData.getUserId(),movieId,Integer.parseInt(rating),comment);
+    }
+
+    @RequestMapping(value = "/reviews/{movieId}", method = RequestMethod.DELETE)
+    public void deleteMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
+        ActiveUser activeUserData = ActiveUser.getActiveUserData(servletRequest);
+        reviewApplication.deleteUserReview(activeUserData.getUserId(),movieId);
+    }
+
+
 
 
 }

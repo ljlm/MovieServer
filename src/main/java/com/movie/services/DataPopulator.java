@@ -45,7 +45,6 @@ public class DataPopulator {
       params = new Object[] { 4,"drama"};
       dbManager.insertQuery(inserQuery, params, types);
 
-
       params = new Object[] { 5,"documentary"};
       dbManager.insertQuery(inserQuery, params, types);
 
@@ -54,7 +53,6 @@ public class DataPopulator {
 
       params = new Object[] { 7,"comedy"};
       dbManager.insertQuery(inserQuery, params, types);
-
 
       params = new Object[] { 8,"thriller"};
       dbManager.insertQuery(inserQuery, params, types);

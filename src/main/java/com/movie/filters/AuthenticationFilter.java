@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
+import java.util.Map;
 
 
 /**
@@ -24,7 +25,7 @@ public class AuthenticationFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-    			
+
     }
 
     @Override
@@ -35,7 +36,11 @@ public class AuthenticationFilter implements Filter {
             filterChain.doFilter(servletRequest,servletResponse);
         }
         byte[] userpassBase64 = getRequesAuthenticationHeader(wrappedRequest);
-        validateUserCredentials(userpassBase64,session);
+        try {
+            validateUserCredentials(userpassBase64,session);
+        } catch (Exception e) {
+            throw new SecurityException(e.getCause());
+        }
         filterChain.doFilter(wrappedRequest,servletResponse);
 
 
@@ -49,19 +54,14 @@ public class AuthenticationFilter implements Filter {
         throw new IllegalArgumentException("Unautorized");
     }
 
-    private void validateUserCredentials (byte[] userpassBase64, HttpSession session) throws UnsupportedEncodingException {
+    private void validateUserCredentials (byte[] userpassBase64, HttpSession session) throws Exception {
         String userpass = new String(userpassBase64, "utf-8");
         String username = userpass.split(":")[0];
         String password = userpass.split(":")[1];
-        int userId = DataManager.getUserDataManager().getUserIdIfExists(username, password);
-        if (userId > -1){
-            ActiveUser activeUser = new ActiveUser(username,userId);
-            session.setAttribute("activeUser", activeUser);
+        Map user = DataManager.getUserDataManager().getUserIdIfExists(username, password);
+        ActiveUser activeUser = new ActiveUser((String) user.get("username"),(int)user.get("id"), (int)user.get("role"));
+        session.setAttribute("activeUser", activeUser);
 
-        }
-        else{
-            throw new IllegalArgumentException("Unautorized");
-        }
     }
 
 

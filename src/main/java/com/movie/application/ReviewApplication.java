@@ -2,6 +2,8 @@ package com.movie.application;
 
 import com.movie.services.DataManager;
 import com.movie.services.LocksService;
+import com.movie.services.ReviewsDataManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,9 @@ import java.util.Map;
  */
 @Component
 public class ReviewApplication {
+
+    @Autowired
+    private ReviewsDataManager reviewsDataManager;
 
     public List<Map<String,Object>> getReviews (){
        return DataManager.getReviewsDataManager().getReviews();
@@ -36,5 +41,13 @@ public class ReviewApplication {
         return response;
     }
 
+
+    public void createUserReview (int userId, int movieId, int rating , String review){
+        reviewsDataManager.createMovieRating( userId,  movieId,  rating ,  review);
+    }
+
+    public void deleteUserReview (int userId, int movieId){
+        reviewsDataManager.deleteMovieRating(userId,movieId);
+    }
 
 }

@@ -1,10 +1,15 @@
 package com.movie.controllers;
 
 import com.movie.services.DataPopulator;
+import com.movie.services.RoleValidator;
+import com.movie.tools.ActiveUser;
+import org.omg.PortableInterceptor.ACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.ServletRequest;
 
 @EnableAutoConfiguration
 @RestController
@@ -17,7 +22,8 @@ public class AdminController {
     public DataPopulator dataPopulator;
 
     @RequestMapping("/createtables")
-    public void createTables(){
+    public void createTables(ServletRequest servletRequest) throws Exception {
+        RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
         dataPopulator.createTables();
     }
 

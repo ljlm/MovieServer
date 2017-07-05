@@ -10,10 +10,12 @@ import javax.servlet.http.HttpSession;
 public class ActiveUser {
     private String username;
     private int userId;
+    private int role;
 
-    public ActiveUser(String username, int userId){
+    public ActiveUser(String username, int userId, int role){
         this.username=username;
         this.userId=userId;
+        this.role=role;
     }
 
     public static ActiveUser getActiveUserData (ServletRequest servletRequest){
@@ -38,5 +40,11 @@ public class ActiveUser {
         return userId;
     }
 
+    public int getRole() {
+        return role;
+    }
 
+    public void setRole(int role) {
+        this.role = role;
+    }
 }

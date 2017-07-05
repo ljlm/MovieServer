@@ -24,17 +24,18 @@ public class UserDataManager {
         return user.get(0);
     }
 
-    public int getUserIdIfExists (String username, String password){
+    public Map<String, Object> getUserIdIfExists (String username, String password) throws Exception {
         String query = "SELECT * FROM movieserverdb.users WHERE user_name='"+username + "';";
         List<Map<String,Object>> users = dbManager.queryForList(query.toString());
         if (users!=null){
             Map<String, Object> user = users.get(0);
             if (user != null && user.get("password").equals(password)){
-                return (Integer) user.get("id");
+                return user;
             }
         }
 
-        return -1;
+        throw new Exception ("invalid credentials");
+//        return -1;
     }
 
     public  Integer insertUser (String userName , String pass,String fName ,String lName ){
