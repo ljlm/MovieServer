@@ -58,12 +58,12 @@ public class MovieController {
     public List getMoviesLeasedByUser ( ServletRequest servletRequest){
         return null;
     }
-    //TODO
+
     @RequestMapping( value = "/leaser/{movieID}", method = RequestMethod.PUT)
     public boolean leaseMovie(@PathVariable Integer movieID,ServletRequest servletRequest ){
         return movieApplication.leaseMovie(movieID, ActiveUser.getActiveUserData(servletRequest).getUserId());
     }
-    //TODO
+    
     @RequestMapping( value = "/leaser/{movieID}", method = RequestMethod.DELETE)
     public boolean unleaseMovie(@PathVariable Integer movieID, ServletRequest servletRequest){
         return movieApplication.unleaseMovie(movieID, ActiveUser.getActiveUserData(servletRequest).getUserId());

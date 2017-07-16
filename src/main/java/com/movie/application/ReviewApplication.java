@@ -43,6 +43,7 @@ public class ReviewApplication {
 
 
     public void createUserReview (int userId, int movieId, int rating , String review){
+        reviewsDataManager.deleteMovieRating(userId,movieId);
         reviewsDataManager.createMovieRating( userId,  movieId,  rating ,  review);
     }
 

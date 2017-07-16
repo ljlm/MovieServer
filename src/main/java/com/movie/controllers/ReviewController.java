@@ -50,7 +50,6 @@ public class ReviewController {
         ActiveUser activeUserData = ActiveUser.getActiveUserData(servletRequest);
         String comment  =  servletRequest.getParameter("comment");
         String rating  =  servletRequest.getParameter("rating");
-        reviewApplication.deleteUserReview(activeUserData.getUserId(),movieId);
         reviewApplication.createUserReview(activeUserData.getUserId(),movieId,Integer.parseInt(rating),comment);
     }
 

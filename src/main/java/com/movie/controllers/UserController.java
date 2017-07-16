@@ -16,8 +16,6 @@ import java.util.Map;
 @EnableAutoConfiguration
 @RestController
 public class UserController {
-    @Autowired
-    public DataManager dataManager;
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
     public Map<String, Object> getUserById(@PathVariable Integer userId){
