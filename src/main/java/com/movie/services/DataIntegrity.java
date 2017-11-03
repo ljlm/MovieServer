@@ -5,6 +5,7 @@ import com.movie.tools.Calculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +28,18 @@ public class DataIntegrity {
     @Autowired
     public MovieApplication movieApplication;
 
+    @Autowired
+    private DataPopulator dp;
+
     @Scheduled(fixedRate = 3600000)
     public void reportCurrentTime() {
-        movieApplication.calculateMoviesRating ();
-    }
+        try {
+            movieApplication.calculateMoviesRating();
+        }catch(BadSqlGrammarException e){
+            dp.createTables();
+        }
+        }
+
 
 
 
