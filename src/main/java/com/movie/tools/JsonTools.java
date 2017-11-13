@@ -47,7 +47,6 @@ public class JsonTools {
         } else {
              return "\"" + obj +  "\"";
         }
-//        return "";
     }
 
     public static String convertToJson(Object obj){

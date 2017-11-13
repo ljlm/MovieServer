@@ -2,6 +2,7 @@ package com.movie.controllers;
 
 import com.movie.services.DataManager;
 import com.movie.tools.ActiveUser;
+import com.movie.tools.JsonTools;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -22,8 +23,8 @@ import javax.servlet.ServletRequest;
 public class UserController {
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public Map<String, Object> getUserById( ServletRequest servletRequest){
-        return DataManager.getUserDataManager().getUserById(ActiveUser.getActiveUserData(servletRequest).getUserId());
+    public String getUserById( ServletRequest servletRequest){
+        return JsonTools.convertToJson(DataManager.getUserDataManager().getUserById(ActiveUser.getActiveUserData(servletRequest).getUserId()));
     }
 
 }

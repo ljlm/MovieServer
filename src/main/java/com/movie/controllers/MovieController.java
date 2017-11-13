@@ -28,25 +28,23 @@ public class MovieController {
 
 
     @RequestMapping(value = "/movies", method = RequestMethod.GET)
-    public List getMovies(){
-        System.out.println(JsonTools.convertToJson(movieApplication.getMovieList()));
-        return movieApplication.getMovieList();
+    public String getMovies(){
+        return JsonTools.convertToJson(movieApplication.getMovieList());
     }
 
     @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
-    public Map<String, Object> getMoviesById(@PathVariable Integer movieID){
-        System.out.println(JsonTools.convertToJson(movieApplication.getMovieById(movieID)));
-        return movieApplication.getMovieById(movieID);
+    public String getMoviesById(@PathVariable Integer movieID){
+        return JsonTools.convertToJson(movieApplication.getMovieById(movieID));
     }
 
     @RequestMapping(value = "/movies/categories", method = RequestMethod.GET)
-    public List getCategories(){
-        return movieApplication.getCategories();
+    public String getCategories(){
+        return JsonTools.convertToJson(movieApplication.getCategories());
     }
 
     @RequestMapping(value = "/movies/categories/{categoryId}", method = RequestMethod.GET)
-    public List getMoviesByCategory(@PathVariable Integer categoryId){
-        return movieApplication.getMovieByCategory(categoryId);
+    public String getMoviesByCategory(@PathVariable Integer categoryId){
+        return JsonTools.convertToJson(movieApplication.getMovieByCategory(categoryId));
     }
 
 
@@ -57,7 +55,7 @@ public class MovieController {
     }
     //TODO
     @RequestMapping( value = "/leaser", method = RequestMethod.GET)
-    public List getMoviesLeasedByUser ( ServletRequest servletRequest){
+    public String getMoviesLeasedByUser ( ServletRequest servletRequest){
         return null;
     }
 

@@ -3,6 +3,8 @@ package com.movie.controllers;
 import com.movie.application.ReviewApplication;
 import com.movie.services.DataManager;
 import com.movie.tools.ActiveUser;
+import com.movie.tools.JsonTools;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,13 +33,13 @@ public class ReviewController {
 
 
     @RequestMapping(value = "/reviews", method = RequestMethod.GET)
-    public List<Map<String,Object>> getReviews(){
-        return reviewApplication.getReviews();
+    public String getReviews(){
+        return JsonTools.convertToJson(reviewApplication.getReviews());
     }
 
     @RequestMapping(value = "/reviews/{movieID}", method = RequestMethod.GET)
-    public List getReviewsByMovieID(@PathVariable Integer movieID){
-        return reviewApplication.getReviewsByMovieId(movieID);
+    public String getReviewsByMovieID(@PathVariable Integer movieID){
+        return JsonTools.convertToJson(reviewApplication.getReviewsByMovieId(movieID));
     }
 
     @RequestMapping(value = "/reviews/{userId}/{movieId}/{rating}", method = RequestMethod.PUT)
