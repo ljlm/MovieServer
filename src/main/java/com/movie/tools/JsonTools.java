@@ -1,10 +1,11 @@
 package com.movie.tools;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class JsonTools {
+    private static String [] fieldToHide = {"locked" , "password"};
+
     private static String convertToJsonFunc(Object obj){
         StringBuffer sb = new StringBuffer();
 
@@ -27,6 +28,11 @@ public class JsonTools {
             sb.append("]");
             return sb.toString();
         } else if (obj instanceof Map){
+            for (String fieldToHide : fieldToHide) {
+                if ( ((Map) obj).containsKey(fieldToHide)){
+                    ((Map) obj).remove(fieldToHide);
+                }
+            }
             Set keys =  ((Map) obj).keySet();
             sb.append("{");
             boolean first = true;
