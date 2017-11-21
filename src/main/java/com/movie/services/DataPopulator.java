@@ -107,8 +107,8 @@ public class DataPopulator {
         dbManager.executeQuery("drop table if exists movies");
         dbManager.executeQuery("CREATE TABLE movies(" +
                 "id int NOT NULL AUTO_INCREMENT ,movie_name VARCHAR(255) ,pic_link VARCHAR(255) , year int, category int, info VARCHAR(1027) , rating FLOAT ,raters int,available int,locked int,PRIMARY KEY (id))");
-        types = new int[] {Types.VARCHAR,Types.VARCHAR,Types.INTEGER, Types.INTEGER,Types.VARCHAR , Types.FLOAT ,Types.INTEGER,Types.INTEGER,Types.INTEGER};
-        inserQuery = "INSERT INTO movies (movie_name, pic_link , year, category, info,rating ,raters ,available,locked ) VALUES (?, ?, ?, ?,?,?,?,?,?) ";
+        types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.INTEGER,Types.INTEGER , Types.VARCHAR ,Types.FLOAT,Types.INTEGER,Types.INTEGER,Types.INTEGER};
+        inserQuery = "INSERT INTO movies (movie_name, pic_link , year, category, info,rating ,raters ,available,locked ) VALUES (?, ?,?,?,?,?,?,?,?) ";
 
         params = new Object[] { "City of God","https://images-na.ssl-images-amazon.com/images/M/MV5BNTM4MjZjNWEtMmQxMi00YzY5LTg4ZTAtODJlMDVkZWZmNTVhXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_SY1000_CR0,0,677,1000_AL_.jpg",
                 2002, Categories.CRIME,"Two boys growing up in a violent neighborhood" +
