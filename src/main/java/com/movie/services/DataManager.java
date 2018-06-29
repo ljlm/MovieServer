@@ -24,13 +24,16 @@ public class DataManager {
     private static MovieDataService movieDataService;
     private static ReviewsDataManager  reviewsDataManager;
     private static UserDataManager userDataManager;
+    private static RantedMoviesDataManager rantedMoviesDataManager;
 
     @Autowired
     public DataManager (MovieDataService movieDataService,
-                        ReviewsDataManager  reviewsDataManager,UserDataManager userDataManager ){
+                        ReviewsDataManager  reviewsDataManager,UserDataManager userDataManager,
+                        RantedMoviesDataManager rantedMoviesDataManager ){
         DataManager.movieDataService=movieDataService;
         DataManager.reviewsDataManager=reviewsDataManager;
         DataManager.userDataManager=userDataManager;
+        DataManager.rantedMoviesDataManager=rantedMoviesDataManager;
     }
 
     public static MovieDataService getMovieDataService(){
@@ -43,5 +46,9 @@ public class DataManager {
 
     public static UserDataManager getUserDataManager(){
         return userDataManager;
+    }
+
+    public static RantedMoviesDataManager getRantedMoviesDataManager(){
+        return rantedMoviesDataManager;
     }
 }

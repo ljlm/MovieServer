@@ -66,4 +66,8 @@ public class ReviewsDataManager {
     }
 
 
+    public List<Map<String,Object>> getReviewsByUserId(int userId) {
+        List<Map<String,Object>> reviews = dbManager.queryForList("SELECT * FROM movieserverdb.rating WHERE user_id="+ userId + ";");
+        return reviews;
+    }
 }

@@ -59,7 +59,7 @@ public class AuthenticationFilter implements Filter {
         String username = userpass.split(":")[0];
         String password = userpass.split(":")[1];
         Map user = DataManager.getUserDataManager().getUserIdIfExists(username, password);
-        ActiveUser activeUser = new ActiveUser((String) user.get("username"),(int)user.get("id"), (int)user.get("role"));
+        ActiveUser activeUser = new ActiveUser((String) user.get("user_name"),(int)user.get("id"), (int)user.get("role"));
         session.setAttribute("activeUser", activeUser);
 
     }

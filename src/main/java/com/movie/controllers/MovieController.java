@@ -1,6 +1,8 @@
 package com.movie.controllers;
 
 import com.movie.application.MovieApplication;
+import com.movie.application.RantedMoviesApplication;
+import com.movie.services.RantedMoviesDataManager;
 import com.movie.tools.ActiveUser;
 import com.movie.tools.JsonTools;
 
@@ -26,26 +28,35 @@ public class MovieController {
     @Autowired
     private MovieApplication movieApplication;
 
+    @Autowired
+    private RantedMoviesApplication rantedMoviesApplication;
 
+// Get all movies
     @RequestMapping(value = "/movies", method = RequestMethod.GET)
     public String getMovies(){
         return JsonTools.convertToJson(movieApplication.getMovieList());
     }
 
+//    Get movie by id
     @RequestMapping(value = "/movies/{movieID}", method = RequestMethod.GET)
     public String getMoviesById(@PathVariable Integer movieID){
         return JsonTools.convertToJson(movieApplication.getMovieById(movieID));
     }
 
+//    Get movie's categories
     @RequestMapping(value = "/movies/categories", method = RequestMethod.GET)
     public String getCategories(){
         return JsonTools.convertToJson(movieApplication.getCategories());
     }
 
+//    Get movie by category
     @RequestMapping(value = "/movies/categories/{categoryId}", method = RequestMethod.GET)
     public String getMoviesByCategory(@PathVariable Integer categoryId){
         return JsonTools.convertToJson(movieApplication.getMovieByCategory(categoryId));
     }
+
+
+
 
 
     //TODO
@@ -56,7 +67,7 @@ public class MovieController {
     //TODO
     @RequestMapping( value = "/leaser", method = RequestMethod.GET)
     public String getMoviesLeasedByUser ( ServletRequest servletRequest){
-        return null;
+        return JsonTools.convertToJson(rantedMoviesApplication.getRantedMovieLogByUser(ActiveUser.getActiveUserData(servletRequest).getUserId()));
     }
 
     @RequestMapping( value = "/leaser/{movieID}", method = RequestMethod.PUT)

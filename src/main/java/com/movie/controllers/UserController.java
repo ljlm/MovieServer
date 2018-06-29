@@ -27,4 +27,14 @@ public class UserController {
         return JsonTools.convertToJson(DataManager.getUserDataManager().getUserById(ActiveUser.getActiveUserData(servletRequest).getUserId()));
     }
 
+    @RequestMapping(value = "/users/reviews", method = RequestMethod.GET)
+    public String getReviewsByUser( ServletRequest servletRequest){
+        return JsonTools.convertToJson(DataManager.getReviewsDataManager().getReviewsByUserId(ActiveUser.getActiveUserData(servletRequest).getUserId()));
+    }
+
+
+
+
+
+
 }

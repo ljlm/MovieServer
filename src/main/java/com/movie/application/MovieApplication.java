@@ -6,11 +6,16 @@ import com.movie.services.LocksService;
 import com.movie.tools.Calculator;
 import com.movie.tools.DBRowLockerData;
 import com.movie.tools.DBRowUpdateData;
+import com.movie.tools.DbDataEnums;
+import com.movie.tools.errors.AlreadyExistentMovieException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.security.InvalidParameterException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -157,7 +162,31 @@ public class MovieApplication {
     }
 
 
+    public void addMovie(String movieName, String picLink, String yearStr, String categoryStr, String info, String availableStr) throws AlreadyExistentMovieException {
+
+        int year;
+        try{
+            year = Integer.parseInt( yearStr);
+        }catch (Exception e){
+            throw new InvalidParameterException("Parameter year=" + yearStr + " is invalid");
+        }
 
 
+        int category;
+        try {
+            category = Integer.parseInt(categoryStr);
+        }catch (Exception e){
+            throw new InvalidParameterException("Parameter category=" + categoryStr + " is invalid");
+        }
+
+        int available;
+        try{
+            available = Integer.parseInt(availableStr);
+        }catch (Exception e){
+            throw new InvalidParameterException("Parameter available=" + availableStr + " is invalid");
+        }
+
+        DataManager.getMovieDataService().addMovie(movieName,picLink,year,category,info,available);
+    }
 
 }

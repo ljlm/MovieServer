@@ -1,16 +1,22 @@
 package com.movie.application;
 
 import com.movie.dal.DBManager;
+import com.movie.services.DataManager;
 import com.movie.services.LocksService;
 import com.movie.tools.DBRowUpdateData;
+import com.movie.tools.errors.AlreadyExistentUserNameException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.security.InvalidParameterException;
 import java.sql.Types;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lionelm on 6/28/2017.
@@ -62,6 +68,8 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dbManager.insertQuery(inserQuery, params, types);
     }
 
+
+
     public void updateRantedMovieLog (int userId, int movieId){
         Calendar cal = Calendar.getInstance();
         String today = dateFormat.format(cal.getTime());
@@ -77,7 +85,23 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     }
 
 
+    public void addUser(String userName, String password, String firstName, String lastName, String roleStr, String creditsStr) throws AlreadyExistentUserNameException {
+        int role;
+        try{
+            role = Integer.parseInt(roleStr);
+        }catch (Exception e){
+            throw new InvalidParameterException("Parameter role=" + roleStr + " is invalid");
+        }
+
+        int credits;
+        try{
+            credits = Integer.parseInt(creditsStr);
+        }catch (Exception e){
+            throw new InvalidParameterException("Parameter credits=" + creditsStr + " is invalid");
+        }
+
+        DataManager.getUserDataManager().addUser(userName, password, firstName, lastName, role, credits);
 
 
-
+    }
 }

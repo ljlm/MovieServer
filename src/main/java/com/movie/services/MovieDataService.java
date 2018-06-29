@@ -2,9 +2,12 @@ package com.movie.services;
 
 import com.movie.dal.DBManager;
 import com.movie.tools.DBRowUpdateData;
+import com.movie.tools.errors.AlreadyExistentMovieException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +22,9 @@ import static com.movie.tools.constants.MoviesDBConstants.SELECT_ALL_FROM_MOVIES
  */
 @Service
 public class MovieDataService {
+
+    private int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.INTEGER,Types.INTEGER , Types.VARCHAR ,Types.FLOAT,Types.INTEGER,Types.INTEGER,Types.INTEGER};
+    private String inserQuery = "INSERT INTO movies (movie_name, pic_link , year, category, info,rating ,raters ,available,locked ) VALUES (?, ?,?,?,?,?,?,?,?) ";
     @Autowired
     public DBManager dbManager;
 
@@ -70,6 +76,17 @@ public class MovieDataService {
 
     public List <String> getCategories(){
         return dbManager.queryForList(SELECT_ALL_FROM_CATEGORIES+  ";");
+    }
+
+    public void addMovie(String movieName, String picLink, int year, int category, String info, int available) throws AlreadyExistentMovieException {
+        List<Map<String,Object>> movies = dbManager.queryForList(SELECT_ALL_FROM_MOVIES_WHERE_+"movie_name=" + movieName + " && year="+year+   ";");
+        if (movies.size() > 0){
+            throw new AlreadyExistentMovieException("The requested movie " + movieName + "is already listed in database.");
+        }
+        Object[] params = new Object[] { movieName,picLink,year, category,info,0,0,available,0};
+        if (dbManager.insertQuery(inserQuery, params, types) != 1){
+            throw new InternalError("Unable to add movie to database");
+        }
     }
 
 }
