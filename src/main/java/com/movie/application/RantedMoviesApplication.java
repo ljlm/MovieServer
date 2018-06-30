@@ -15,4 +15,6 @@ public class RantedMoviesApplication {
         return DataManager.getRantedMoviesDataManager().getUserLeaseHistory(userId);
     }
 
+
+
 }
