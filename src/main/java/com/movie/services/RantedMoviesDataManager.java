@@ -17,7 +17,7 @@ public class RantedMoviesDataManager {
 
 
     public List<Map<String,Object>> getUserLeaseHistory(int userId){
-        String query = "SELECT * FROM movieserverdb.rented_movies WHERE user_id='"+userId + "' && return_date is NULL ;";
+        String query = "SELECT * FROM movieserverdb.rented_movies a, movieserverdb.movies b WHERE a.user_id='"+userId + "' && a.return_date is NULL && a.movie_id = b.id ;";
         List<Map<String,Object>> userReviews = dbManager.queryForList(query);
         return userReviews;
     }
