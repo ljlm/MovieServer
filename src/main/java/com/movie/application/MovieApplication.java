@@ -31,6 +31,9 @@ public class MovieApplication {
     private ReviewApplication reviewApplication;
 
     @Autowired
+    private RantedMoviesApplication rantedMoviesApplication;
+
+    @Autowired
     private UserApplication userApplication;
 
     private static final Logger logger = LoggerFactory.getLogger(MovieApplication.class);
@@ -141,7 +144,7 @@ public class MovieApplication {
             LocksService.unlockMultipleRows(rowsToLock);
             return false;
         }
-        if (!userApplication.decreaseUserCredits(userId,false)){
+        if ( rantedMoviesApplication.isMovieRantedByUser(userId,movieId) || !userApplication.decreaseUserCredits(userId,false)){
             increaseMovieCopiesCounter( movieId, false);
             LocksService.unlockMultipleRows(rowsToLock);
             return false;
@@ -154,6 +157,9 @@ public class MovieApplication {
     }
 
     public  boolean unleaseMovie (int movieId, int userId){
+        if (!rantedMoviesApplication.isMovieRantedByUser(userId, movieId)){
+            return false;
+        }
         if (increaseMovieCopiesCounter(movieId,true)){
             userApplication.updateRantedMovieLog(userId,movieId);
             return true;

@@ -70,6 +70,7 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
 
+
     public void updateRantedMovieLog (int userId, int movieId){
         Calendar cal = Calendar.getInstance();
         String today = dateFormat.format(cal.getTime());

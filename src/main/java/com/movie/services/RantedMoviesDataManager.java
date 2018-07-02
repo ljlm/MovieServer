@@ -21,4 +21,10 @@ public class RantedMoviesDataManager {
         List<Map<String,Object>> userReviews = dbManager.queryForList(query);
         return userReviews;
     }
+
+    public boolean isMovieRantedByUser(int userId, int movieID){
+        String query = "SELECT * FROM movieserverdb.rented_movies  WHERE user_id='"+userId + "' && movie_id='" +movieID +"' && return_date is NULL ;";
+        List<Map<String,Object>> userReviews = dbManager.queryForList(query);
+        return userReviews.size()!=0;
+    }
 }
