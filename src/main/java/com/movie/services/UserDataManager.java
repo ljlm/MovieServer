@@ -2,6 +2,7 @@ package com.movie.services;
 
 import com.movie.dal.DBManager;
 import com.movie.tools.errors.AlreadyExistentUserNameException;
+import com.movie.tools.errors.UnauthorizedException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class UserDataManager {
         return user.get(0);
     }
 
-    public Map<String, Object> getUserIdIfExists (String username, String password) throws Exception {
+    public Map<String, Object> getUserIdIfExists (String username, String password) throws UnauthorizedException {
         String query = "SELECT * FROM movieserverdb.users WHERE user_name='"+username + "';";
         List<Map<String,Object>> users = dbManager.queryForList(query.toString());
         if (users!=null){
@@ -39,15 +40,15 @@ public class UserDataManager {
             }
         }
 
-        throw new Exception ("invalid credentials");
+        throw new UnauthorizedException("invalid credentials");
 //        return -1;
     }
 
     public  Integer insertUser (String userName , String pass,String fName ,String lName ){
-        String inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,credits) VALUES (?, ?, ?, ?,?) ";
-        int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER};
+        String inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,role,credits,locked) VALUES (?, ?, ?, ?, ? , ?,?) ";
+        int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR , Types.INTEGER, Types.INTEGER,Types.INTEGER};
 
-        Object[] params = new Object[] { userName,pass,fName, lName,0};
+        Object[] params = new Object[] { userName,pass,fName, lName , 1,0 , 0};
         dbManager.insertQuery(inserQuery, params, types);
         return 1;
 

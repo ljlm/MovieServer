@@ -32,6 +32,11 @@ public class UserController {
         return JsonTools.convertToJson(DataManager.getReviewsDataManager().getReviewsByUserId(ActiveUser.getActiveUserData(servletRequest).getUserId()));
     }
 
+    @RequestMapping(value = "/newuser", method = RequestMethod.POST)
+    public boolean newUser( ServletRequest servletRequest){
+        return true;
+    }
+
 
 
 

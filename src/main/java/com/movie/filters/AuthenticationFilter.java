@@ -2,6 +2,7 @@ package com.movie.filters;
 
 import com.movie.services.DataManager;
 import com.movie.tools.ActiveUser;
+import com.movie.tools.errors.UnauthorizedException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +33,9 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpResettableServletRequest wrappedRequest = new HttpResettableServletRequest((HttpServletRequest) servletRequest);
         HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
-        if (session.getAttribute("newUser") != null){
+        if (session.getAttribute("newuser") != null){
             filterChain.doFilter(servletRequest,servletResponse);
+            return;
         }
         byte[] userpassBase64 = getRequesAuthenticationHeader(wrappedRequest);
         try {
@@ -54,7 +56,7 @@ public class AuthenticationFilter implements Filter {
         throw new IllegalArgumentException("Unautorized");
     }
 
-    private void validateUserCredentials (byte[] userpassBase64, HttpSession session) throws Exception {
+    private void validateUserCredentials (byte[] userpassBase64, HttpSession session) throws UnauthorizedException, UnsupportedEncodingException {
         String userpass = new String(userpassBase64, "utf-8");
         String username = userpass.split(":")[0];
         String password = userpass.split(":")[1];

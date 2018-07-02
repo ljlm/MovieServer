@@ -5,8 +5,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.movie.services.DataManager;
+import com.movie.tools.ActiveUser;
+import com.movie.tools.errors.UnauthorizedException;
 
 import java.io.IOException;
+import java.util.Map;
 
 
 /**
@@ -26,12 +29,21 @@ public class NewUserFilter implements Filter {
         HttpResettableServletRequest wrappedRequest = new HttpResettableServletRequest((HttpServletRequest) servletRequest);
         HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
         session.setAttribute("newuser",true);
-        filterChain.doFilter(wrappedRequest,servletResponse);
+
         String userName= wrappedRequest.getParameter("username");
         String pass= wrappedRequest.getParameter("password");
         String fName = wrappedRequest.getParameter("firstname");
         String lName = wrappedRequest.getParameter("lastname");
         DataManager.getUserDataManager().insertUser(userName, pass, fName, lName);
+        Map user = null;
+        try {
+            user = DataManager.getUserDataManager().getUserIdIfExists(userName, pass);
+        } catch (Exception e) {
+            throw new SecurityException(e.getCause());
+        }
+        ActiveUser activeUser = new ActiveUser((String) user.get("user_name"),(int)user.get("id"), (int)user.get("role"));
+        session.setAttribute("activeUser", activeUser);
+        filterChain.doFilter(wrappedRequest,servletResponse);
         
     }
 
