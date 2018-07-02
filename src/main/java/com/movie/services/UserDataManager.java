@@ -44,6 +44,12 @@ public class UserDataManager {
 //        return -1;
     }
 
+    public boolean isUserNameRegistered(String username){
+        String query = "SELECT * FROM movieserverdb.users WHERE user_name='"+username + "';";
+        List<Map<String,Object>> users = dbManager.queryForList(query.toString());
+        return users.size()>0;
+    }
+
     public  Integer insertUser (String userName , String pass,String fName ,String lName ){
         String inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,role,credits,locked) VALUES (?, ?, ?, ?, ? , ?,?) ";
         int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR , Types.INTEGER, Types.INTEGER,Types.INTEGER};

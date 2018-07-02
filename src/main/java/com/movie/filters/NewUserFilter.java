@@ -34,8 +34,11 @@ public class NewUserFilter implements Filter {
         String pass= wrappedRequest.getParameter("password");
         String fName = wrappedRequest.getParameter("firstname");
         String lName = wrappedRequest.getParameter("lastname");
+        if (DataManager.getUserDataManager().isUserNameRegistered(userName)){
+            throw new SecurityException("Username already exist.");
+        }
         DataManager.getUserDataManager().insertUser(userName, pass, fName, lName);
-        Map user = null;
+        Map user;
         try {
             user = DataManager.getUserDataManager().getUserIdIfExists(userName, pass);
         } catch (Exception e) {
