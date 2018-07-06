@@ -69,7 +69,8 @@ public class AdminController {
         String lastName = servletRequest.getParameter("last_name");
         String role =  servletRequest.getParameter("role");
         String credits = servletRequest.getParameter("credits");
-        return userApplication.addUser(userName, password, firstName, lastName, role, credits).toString();
+        String paymentToken = servletRequest.getParameter("payment_token");
+        return userApplication.addUser(userName, password, firstName, lastName, paymentToken, role, credits).toString();
     }
 
 

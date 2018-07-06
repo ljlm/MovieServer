@@ -160,5 +160,13 @@ public class DataPopulator {
         params = new Object[] { 1,1 ,8,"City of God is a beautiful movie. I felt like a child.",0};
         dbManager.insertQuery(inserQuery, params, types);
 
+        dbManager.executeQuery("drop table if exists purchase_history");
+        dbManager.executeQuery("CREATE TABLE purchase_history(" +
+                "id int NOT NULL AUTO_INCREMENT ,user_id int, amount int, price  float, date,locked int,PRIMARY KEY (id))");
+        inserQuery = "INSERT INTO rating (user_id ,movie_id, rating, comment,locked) VALUES (?, ?,?,?,? ) ";
+        types = new int[] { Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.VARCHAR,Types.INTEGER};
+        params = new Object[] { 1,1 ,8,"City of God is a beautiful movie. I felt like a child.",0};
+        dbManager.insertQuery(inserQuery, params, types);
+
     }
 }

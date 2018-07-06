@@ -87,7 +87,7 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     }
 
 
-    public SimpleResponse addUser(String userName, String password, String firstName, String lastName, String roleStr, String creditsStr) throws AlreadyExistentUserNameException {
+    public SimpleResponse addUser(String userName, String password, String firstName, String lastName, String paymentToken, String roleStr, String creditsStr) throws AlreadyExistentUserNameException {
         int role;
         try{
             role = Integer.parseInt(roleStr);
@@ -102,7 +102,7 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             throw new InvalidParameterException("Parameter credits=" + creditsStr + " is invalid");
         }
 
-        return DataManager.getUserDataManager().addUser(userName, password, firstName, lastName, role, credits);
+        return DataManager.getUserDataManager().addUser(userName, password, firstName, lastName, paymentToken, role, credits);
 
 
     }

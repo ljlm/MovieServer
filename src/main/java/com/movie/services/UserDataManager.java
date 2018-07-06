@@ -21,8 +21,8 @@ import static java.awt.SystemColor.info;
  */
 @Service
 public class UserDataManager {
-    private String inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,credits) VALUES (?, ?, ?, ?,?) ";
-    private int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR ,Types.INTEGER};
+    private String inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,payment_token ,role ,credits,locked) VALUES (?,?,?, ?, ?, ?,?,?) ";
+    private int[] types = new int[] { Types.VARCHAR,Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER,Types.INTEGER,Types.INTEGER};
 
     @Autowired
     public DBManager dbManager;
@@ -63,12 +63,12 @@ public class UserDataManager {
 
     }
 
-    public SimpleResponse addUser(String userName, String password, String firstName, String lastName, int role, int credits) throws AlreadyExistentUserNameException {
-        List<Map<String,Object>> users = dbManager.queryForList(SELECT_ALL_FROM_USERS_WHERE_+"user_name=" + userName + ";");
+    public SimpleResponse addUser(String userName, String password, String firstName, String lastName,String paymentToken, int role, int credits) throws AlreadyExistentUserNameException {
+        List<Map<String,Object>> users = dbManager.queryForList(SELECT_ALL_FROM_USERS_WHERE_+"user_name='" + userName + "';");
         if (users.size() > 0){
             throw new AlreadyExistentUserNameException("The requested user " + userName + "is already listed in database.");
         }
-        Object[] params = new Object[] { userName,password,firstName, lastName,role,credits,0};
+        Object[] params = new Object[] { userName,password,firstName, lastName,paymentToken,role,credits,0};
         if (dbManager.insertQuery(inserQuery, params, types) != 1){
             return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to add user to database");
         }
