@@ -81,7 +81,7 @@ public class MovieDataService {
     }
 
     public SimpleResponse addMovie(String movieName, String picLink, int year, int category, String info, int available) throws AlreadyExistentMovieException {
-        List<Map<String,Object>> movies = dbManager.queryForList(SELECT_ALL_FROM_MOVIES_WHERE_+"movie_name=" + movieName + " && year="+year+   ";");
+        List<Map<String,Object>> movies = dbManager.queryForList(SELECT_ALL_FROM_MOVIES_WHERE_+"movie_name='" + movieName + "' && year='"+year+   "';");
         if (movies.size() > 0){
             throw new AlreadyExistentMovieException("The requested movie " + movieName + "is already listed in database.");
         }
