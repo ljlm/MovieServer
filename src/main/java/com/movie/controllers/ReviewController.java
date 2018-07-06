@@ -4,6 +4,7 @@ import com.movie.application.ReviewApplication;
 import com.movie.services.DataManager;
 import com.movie.tools.ActiveUser;
 import com.movie.tools.JsonTools;
+import com.movie.tools.SimpleResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -48,17 +49,17 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/reviews/{movieId}", method = RequestMethod.POST)
-    public void createMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
+    public SimpleResponse createMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
         ActiveUser activeUserData = ActiveUser.getActiveUserData(servletRequest);
         String comment  =  servletRequest.getParameter("comment");
         String rating  =  servletRequest.getParameter("rating");
-        reviewApplication.createUserReview(activeUserData.getUserId(),movieId,Integer.parseInt(rating),comment);
+        return reviewApplication.createUserReview(activeUserData.getUserId(),movieId,Integer.parseInt(rating),comment);
     }
 
     @RequestMapping(value = "/reviews/{movieId}", method = RequestMethod.DELETE)
-    public void deleteMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
+    public SimpleResponse deleteMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
         ActiveUser activeUserData = ActiveUser.getActiveUserData(servletRequest);
-        reviewApplication.deleteUserReview(activeUserData.getUserId(),movieId);
+        return reviewApplication.deleteUserReview(activeUserData.getUserId(),movieId);
     }
 
 

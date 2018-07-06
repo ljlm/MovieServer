@@ -3,6 +3,8 @@ package com.movie.application;
 import com.movie.services.DataManager;
 import com.movie.services.LocksService;
 import com.movie.services.ReviewsDataManager;
+import com.movie.tools.SimpleResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,13 +44,13 @@ public class ReviewApplication {
     }
 
 
-    public void createUserReview (int userId, int movieId, int rating , String review){
+    public SimpleResponse createUserReview (int userId, int movieId, int rating , String review){
         reviewsDataManager.deleteMovieRating(userId,movieId);
-        reviewsDataManager.createMovieRating( userId,  movieId,  rating ,  review);
+        return reviewsDataManager.createMovieRating( userId,  movieId,  rating ,  review);
     }
 
-    public void deleteUserReview (int userId, int movieId){
-        reviewsDataManager.deleteMovieRating(userId,movieId);
+    public SimpleResponse deleteUserReview (int userId, int movieId){
+        return reviewsDataManager.deleteMovieRating(userId,movieId);
     }
 
 }

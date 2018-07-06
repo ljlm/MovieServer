@@ -7,6 +7,7 @@ import com.movie.tools.Calculator;
 import com.movie.tools.DBRowLockerData;
 import com.movie.tools.DBRowUpdateData;
 import com.movie.tools.DbDataEnums;
+import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentMovieException;
 
 import org.slf4j.Logger;
@@ -130,7 +131,7 @@ public class MovieApplication {
     }
 
 
-    public boolean leaseMovie (int movieId, int userId){
+    public SimpleResponse leaseMovie (int movieId, int userId){
         DBRowLockerData movieRow = new DBRowLockerData("movieserverdb.movies" ,"id="+movieId);
         DBRowLockerData userRow = new DBRowLockerData("movieserverdb.users" ,"id="+userId);
 
@@ -138,37 +139,41 @@ public class MovieApplication {
 
         List<DBRowLockerData> rowsToLock = Arrays.asList(movieRow,userRow);
         if (!LocksService.lockMultipleRows(rowsToLock)){
-            return false;
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to lock database rows");
         }
         if (!decreaseMovieCopiesCounter(movieId,false)){
             LocksService.unlockMultipleRows(rowsToLock);
-            return false;
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unsufficient movies");
         }
-        if ( rantedMoviesApplication.isMovieRantedByUser(userId,movieId) || !userApplication.decreaseUserCredits(userId,false)){
+        if ( rantedMoviesApplication.isMovieRantedByUser(userId,movieId)){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("User already have an active lease for this movie");
+        }
+
+        if (  !userApplication.decreaseUserCredits(userId,false)){
             increaseMovieCopiesCounter( movieId, false);
             LocksService.unlockMultipleRows(rowsToLock);
-            return false;
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("No credits left to lease movies");
         }
         userApplication.createRantedMovieLog(userId,movieId);
         LocksService.unlockMultipleRows(rowsToLock);
-        return true;
+        return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
 
 
     }
 
-    public  boolean unleaseMovie (int movieId, int userId){
+    public  SimpleResponse unleaseMovie (int movieId, int userId){
         if (!rantedMoviesApplication.isMovieRantedByUser(userId, movieId)){
-            return false;
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("User has no active lease for this movie");
         }
         if (increaseMovieCopiesCounter(movieId,true)){
             userApplication.updateRantedMovieLog(userId,movieId);
-            return true;
+            return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
         }
-        return false;
+        return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to update the copies quantity of this movie");
     }
 
 
-    public void addMovie(String movieName, String picLink, String yearStr, String categoryStr, String info, String availableStr) throws AlreadyExistentMovieException {
+    public SimpleResponse addMovie(String movieName, String picLink, String yearStr, String categoryStr, String info, String availableStr) throws AlreadyExistentMovieException {
 
         int year;
         try{
@@ -192,7 +197,7 @@ public class MovieApplication {
             throw new InvalidParameterException("Parameter available=" + availableStr + " is invalid");
         }
 
-        DataManager.getMovieDataService().addMovie(movieName,picLink,year,category,info,available);
+        return DataManager.getMovieDataService().addMovie(movieName,picLink,year,category,info,available);
     }
 
 }

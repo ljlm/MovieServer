@@ -2,7 +2,9 @@ package com.movie.controllers;
 
 import com.movie.services.DataManager;
 import com.movie.tools.ActiveUser;
+import com.movie.tools.DbDataEnums;
 import com.movie.tools.JsonTools;
+import com.movie.tools.SimpleResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -33,8 +35,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/newuser", method = RequestMethod.POST)
-    public boolean newUser( ServletRequest servletRequest){
-        return true;
+    public String newUser( ServletRequest servletRequest){
+        return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS).toString();
     }
 
 

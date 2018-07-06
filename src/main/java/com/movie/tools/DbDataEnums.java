@@ -30,15 +30,24 @@ public class DbDataEnums {
         }
 
     }
-    public static final int HORROR = 0;
-    public static final int CRIME =1;
-    public static final int ADVENTURE = 2;
-    public static final int ACCION = 3;
-    public static final int DRAMA = 4;
-    public static final int DOCUMENTERY = 5;
-    public static final int ANIMATION = 6;
-    public static final int COMEDY = 7;
-    public static final int THRILLER = 8;
+    public enum result{
+        SUCCESS(0),
+        FAILURE(1);
+
+        private int value;
+
+        result(int value){
+            this.value = value;
+        }
+        public int getValue(){
+            return value;
+        }
+
+        public result get(){
+            return this;
+        }
+
+    }
 
 
 }

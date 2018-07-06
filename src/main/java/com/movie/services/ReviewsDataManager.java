@@ -1,6 +1,9 @@
 package com.movie.services;
 
 import com.movie.dal.DBManager;
+import com.movie.tools.DbDataEnums;
+import com.movie.tools.SimpleResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +22,22 @@ public class ReviewsDataManager {
     public DBManager dbManager;
 
 
-    public void createMovieRating (int userId, int movieId, int rating , String review){
+    public SimpleResponse createMovieRating (int userId, int movieId, int rating , String review){
         String insertQuery = "INSERT INTO rating (user_id ,movie_id, rating, comment,locked) VALUES (?, ?,?,?,? ) ";
         int[] types = new int[] { Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.VARCHAR,Types.INTEGER};
         Object[] params = new Object[] { userId, movieId ,rating, review,0};
-        dbManager.insertQuery(insertQuery, params, types);
+        if (dbManager.insertQuery(insertQuery, params, types)==1){
+            return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
+        }
+        return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to update the movie ranting and review.");
+
     }
 
-    public void deleteMovieRating (int userId, int movieId){
-        dbManager.updateQuery("DELETE FROM movieserverdb.rating WHERE movie_id="+ movieId + "&& user_id="+userId+";");
+    public SimpleResponse deleteMovieRating (int userId, int movieId){
+        if (dbManager.updateQuery("DELETE FROM movieserverdb.rating WHERE movie_id="+ movieId + "&& user_id="+userId+";") ==1){
+            return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
+        }
+        return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to delete review.");
     }
 
     public  Map<String,Object> getUserReviewsByMovieId(int userId, int movieId){

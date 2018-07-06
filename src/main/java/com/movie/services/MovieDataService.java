@@ -2,6 +2,8 @@ package com.movie.services;
 
 import com.movie.dal.DBManager;
 import com.movie.tools.DBRowUpdateData;
+import com.movie.tools.DbDataEnums;
+import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentMovieException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,15 +80,16 @@ public class MovieDataService {
         return dbManager.queryForList(SELECT_ALL_FROM_CATEGORIES+  ";");
     }
 
-    public void addMovie(String movieName, String picLink, int year, int category, String info, int available) throws AlreadyExistentMovieException {
+    public SimpleResponse addMovie(String movieName, String picLink, int year, int category, String info, int available) throws AlreadyExistentMovieException {
         List<Map<String,Object>> movies = dbManager.queryForList(SELECT_ALL_FROM_MOVIES_WHERE_+"movie_name=" + movieName + " && year="+year+   ";");
         if (movies.size() > 0){
             throw new AlreadyExistentMovieException("The requested movie " + movieName + "is already listed in database.");
         }
         Object[] params = new Object[] { movieName,picLink,year, category,info,0,0,available,0};
         if (dbManager.insertQuery(inserQuery, params, types) != 1){
-            throw new InternalError("Unable to add movie to database");
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to add movie.");
         }
+        return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
     }
 
 }

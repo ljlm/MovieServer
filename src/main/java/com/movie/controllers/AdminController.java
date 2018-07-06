@@ -8,6 +8,7 @@ import com.movie.services.DataPopulator;
 import com.movie.services.RoleValidator;
 import com.movie.tools.ActiveUser;
 import com.movie.tools.DbDataEnums;
+import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentMovieException;
 import com.movie.tools.errors.AlreadyExistentUserNameException;
 import com.movie.tools.errors.InvalidRoleException;
@@ -41,13 +42,14 @@ public class AdminController {
 
 
     @RequestMapping("/createtables")
-    public void createTables(ServletRequest servletRequest) throws InvalidRoleException {
+    public String createTables(ServletRequest servletRequest) throws InvalidRoleException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
         dataPopulator.createTables();
+        return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS).toString();
     }
 
     @RequestMapping(value = "/addmovie",  method = RequestMethod.POST)
-    public void addMovie (ServletRequest servletRequest ) throws InvalidRoleException, AlreadyExistentMovieException {
+    public String addMovie (ServletRequest servletRequest ) throws InvalidRoleException, AlreadyExistentMovieException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
         String movieName = servletRequest.getParameter("movie_name");
         String picLink =  servletRequest.getParameter("pick_link");
@@ -55,11 +57,11 @@ public class AdminController {
         String category = servletRequest.getParameter("category");
         String info =  servletRequest.getParameter("info");
         String available = servletRequest.getParameter("available");
-        movieApplication.addMovie(movieName, picLink, year, category, info, available);
+        return movieApplication.addMovie(movieName, picLink, year, category, info, available).toString();
     }
 
     @RequestMapping(value = "/adduser",  method = RequestMethod.POST)
-    public void addUser (ServletRequest servletRequest ) throws InvalidRoleException, AlreadyExistentUserNameException {
+    public String addUser (ServletRequest servletRequest ) throws InvalidRoleException, AlreadyExistentUserNameException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
         String userName = servletRequest.getParameter("user_name");
         String password =  servletRequest.getParameter("password");
@@ -67,7 +69,7 @@ public class AdminController {
         String lastName = servletRequest.getParameter("last_name");
         String role =  servletRequest.getParameter("role");
         String credits = servletRequest.getParameter("credits");
-        userApplication.addUser(userName, password, firstName, lastName, role, credits);
+        return userApplication.addUser(userName, password, firstName, lastName, role, credits).toString();
     }
 
 

@@ -5,6 +5,7 @@ import com.movie.application.RantedMoviesApplication;
 import com.movie.services.RantedMoviesDataManager;
 import com.movie.tools.ActiveUser;
 import com.movie.tools.JsonTools;
+import com.movie.tools.SimpleResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -56,28 +57,19 @@ public class MovieController {
     }
 
 
-
-
-
-    //TODO
-    @RequestMapping(value = "/movies/topten", method = RequestMethod.GET)
-    public String getTopTenMovies(){
-        return "List of top 10 movies";
-    }
-    //TODO
     @RequestMapping( value = "/leaser", method = RequestMethod.GET)
     public String getMoviesLeasedByUser ( ServletRequest servletRequest){
         return JsonTools.convertToJson(rantedMoviesApplication.getRantedMovieLogByUser(ActiveUser.getActiveUserData(servletRequest).getUserId()));
     }
 
     @RequestMapping( value = "/leaser/{movieID}", method = RequestMethod.PUT)
-    public boolean leaseMovie(@PathVariable Integer movieID,ServletRequest servletRequest ){
-        return movieApplication.leaseMovie(movieID, ActiveUser.getActiveUserData(servletRequest).getUserId());
+    public String leaseMovie(@PathVariable Integer movieID, ServletRequest servletRequest ){
+        return movieApplication.leaseMovie(movieID, ActiveUser.getActiveUserData(servletRequest).getUserId()).toString();
     }
     
     @RequestMapping( value = "/leaser/{movieID}", method = RequestMethod.DELETE)
-    public boolean unleaseMovie(@PathVariable Integer movieID, ServletRequest servletRequest){
-        return movieApplication.unleaseMovie(movieID, ActiveUser.getActiveUserData(servletRequest).getUserId());
+    public String unleaseMovie(@PathVariable Integer movieID, ServletRequest servletRequest){
+        return movieApplication.unleaseMovie(movieID, ActiveUser.getActiveUserData(servletRequest).getUserId()).toString();
     }
 
 

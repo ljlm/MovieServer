@@ -1,6 +1,8 @@
 package com.movie.services;
 
 import com.movie.dal.DBManager;
+import com.movie.tools.DbDataEnums;
+import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentUserNameException;
 import com.movie.tools.errors.UnauthorizedException;
 
@@ -61,14 +63,15 @@ public class UserDataManager {
 
     }
 
-    public void addUser(String userName, String password, String firstName, String lastName, int role, int credits) throws AlreadyExistentUserNameException {
+    public SimpleResponse addUser(String userName, String password, String firstName, String lastName, int role, int credits) throws AlreadyExistentUserNameException {
         List<Map<String,Object>> users = dbManager.queryForList(SELECT_ALL_FROM_USERS_WHERE_+"user_name=" + userName + ";");
         if (users.size() > 0){
             throw new AlreadyExistentUserNameException("The requested user " + userName + "is already listed in database.");
         }
         Object[] params = new Object[] { userName,password,firstName, lastName,role,credits,0};
         if (dbManager.insertQuery(inserQuery, params, types) != 1){
-            throw new InternalError("Unable to add user to database");
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to add user to database");
         }
+        return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
     }
 }

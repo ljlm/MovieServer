@@ -4,6 +4,7 @@ import com.movie.dal.DBManager;
 import com.movie.services.DataManager;
 import com.movie.services.LocksService;
 import com.movie.tools.DBRowUpdateData;
+import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentUserNameException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +87,7 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     }
 
 
-    public void addUser(String userName, String password, String firstName, String lastName, String roleStr, String creditsStr) throws AlreadyExistentUserNameException {
+    public SimpleResponse addUser(String userName, String password, String firstName, String lastName, String roleStr, String creditsStr) throws AlreadyExistentUserNameException {
         int role;
         try{
             role = Integer.parseInt(roleStr);
@@ -101,7 +102,7 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             throw new InvalidParameterException("Parameter credits=" + creditsStr + " is invalid");
         }
 
-        DataManager.getUserDataManager().addUser(userName, password, firstName, lastName, role, credits);
+        return DataManager.getUserDataManager().addUser(userName, password, firstName, lastName, role, credits);
 
 
     }
