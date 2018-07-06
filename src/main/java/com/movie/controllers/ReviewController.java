@@ -49,17 +49,17 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/reviews/{movieId}", method = RequestMethod.POST)
-    public SimpleResponse createMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
+    public String createMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
         ActiveUser activeUserData = ActiveUser.getActiveUserData(servletRequest);
         String comment  =  servletRequest.getParameter("comment");
         String rating  =  servletRequest.getParameter("rating");
-        return reviewApplication.createUserReview(activeUserData.getUserId(),movieId,Integer.parseInt(rating),comment);
+        return reviewApplication.createUserReview(activeUserData.getUserId(),movieId,Integer.parseInt(rating),comment).toString();
     }
 
     @RequestMapping(value = "/reviews/{movieId}", method = RequestMethod.DELETE)
-    public SimpleResponse deleteMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
+    public String deleteMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
         ActiveUser activeUserData = ActiveUser.getActiveUserData(servletRequest);
-        return reviewApplication.deleteUserReview(activeUserData.getUserId(),movieId);
+        return reviewApplication.deleteUserReview(activeUserData.getUserId(),movieId).toString();
     }
 
 

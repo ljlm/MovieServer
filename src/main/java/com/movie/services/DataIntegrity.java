@@ -31,7 +31,7 @@ public class DataIntegrity {
     @Autowired
     private DataPopulator dp;
 
-    @Scheduled(fixedRate = 3600000)
+    @Scheduled(fixedRate = 10000)
     public void reportCurrentTime() {
         try {
             movieApplication.calculateMoviesRating();
