@@ -146,6 +146,8 @@ public class MovieApplication {
             return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unsufficient movies");
         }
         if ( rantedMoviesApplication.isMovieRantedByUser(userId,movieId)){
+            increaseMovieCopiesCounter(movieId,false);
+            LocksService.unlockMultipleRows(rowsToLock);
             return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("User already have an active lease for this movie");
         }
 

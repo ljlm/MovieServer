@@ -25,7 +25,14 @@ public class DBManager {
     private JdbcTemplate jdbcTemplate;
 
     public int updateQuery (String query){
-        return jdbcTemplate.update(query);
+        System.out.println("Attempting to " + query);
+        int lines;
+        try {
+            lines = jdbcTemplate.update(query);
+        }catch (Exception e){
+            return 0;
+        }
+        return lines;
     }
 
     public List queryForList(String query){

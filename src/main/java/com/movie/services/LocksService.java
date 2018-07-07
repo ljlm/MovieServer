@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static com.movie.tools.constants.DBConstants.*;
 
@@ -97,7 +99,11 @@ public class LocksService {
                     unlockLine(rowBlockerData.getDbName(), rowBlockerData.getWhereStatement());
                     return false;
                 }
-
+                try {
+                    Thread.sleep(100 + (new Random().nextInt(15) * 10));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return false;
@@ -115,17 +121,19 @@ public class LocksService {
 
 
     public static boolean lockMultipleRows(List<DBRowLockerData> rows){
+        List<DBRowLockerData> lockedByMeRows = new ArrayList<>();
         boolean isSucessful= true;
         for (DBRowLockerData rowData : rows){
             if (lineExists(rowData.getDbName(),rowData.getWhereStatement()) && lockLine(rowData.getDbName(),rowData.getWhereStatement() )){
                 isSucessful = isSucessful && true;
+                lockedByMeRows.add(rowData);
             }
             else {
                 isSucessful = isSucessful && false;
             }
         }
         if (!isSucessful){
-            handleLockFailure(rows);
+            handleLockFailure(lockedByMeRows);
         }
         return isSucessful;
     }
@@ -158,12 +166,22 @@ public class LocksService {
         String firstParam = lock ? LOCKED : UNLOCKED;
         String secondParam = lock ? UNLOCKED : LOCKED;
 
-        handleLockLineQuery.append(UPDATE_).append(dbName).append(_SET_LOCKEDe+firstParam +_WHERE_)
-                .append(whereStatement).append(_AND_LOCKEDe+secondParam +_EOL);
-        if (dbManager.updateQuery(handleLockLineQuery.toString()) > 0){
-            return true;
+        for (int i=0 ; i<3 ; i++) {
+            handleLockLineQuery.append(UPDATE_).append(dbName).append(_SET_LOCKEDe + firstParam + _WHERE_)
+                    .append(whereStatement).append(_AND_LOCKEDe + secondParam + _EOL);
+            if (dbManager.updateQuery(handleLockLineQuery.toString()) > 0) {
+                return true;
+            }
+            try {
+                Thread.sleep(100 + (new Random().nextInt(15) * 10));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
         }
         return false;
+
     }
 
 
