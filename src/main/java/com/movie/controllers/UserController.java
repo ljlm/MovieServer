@@ -1,10 +1,13 @@
 package com.movie.controllers;
 
+import com.movie.application.PurchaseApplication;
 import com.movie.services.DataManager;
+import com.movie.services.RoleValidator;
 import com.movie.tools.ActiveUser;
 import com.movie.tools.DbDataEnums;
 import com.movie.tools.JsonTools;
 import com.movie.tools.SimpleResponse;
+import com.movie.tools.errors.InvalidRoleException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -23,6 +26,8 @@ import javax.servlet.ServletRequest;
 @EnableAutoConfiguration
 @RestController
 public class UserController {
+    @Autowired
+    private PurchaseApplication purchaseApplication;
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String getUserById( ServletRequest servletRequest){
@@ -37,6 +42,17 @@ public class UserController {
     @RequestMapping(value = "/newuser", method = RequestMethod.POST)
     public String newUser( ServletRequest servletRequest){
         return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS).toString();
+    }
+
+    @RequestMapping(value = "/credits", method = RequestMethod.POST)
+    public String purchaseCredits( ServletRequest servletRequest){
+        String amount  =  servletRequest.getParameter("amount");
+        return purchaseApplication.purchaseCredits(ActiveUser.getActiveUserData(servletRequest).getUserId(),amount).toString();
+    }
+
+    @RequestMapping(value = "/credits",  method = RequestMethod.GET)
+    public String getUserPurchaseHistory (ServletRequest servletRequest ) throws InvalidRoleException {
+        return purchaseApplication.getUserPurchaseHistory(ActiveUser.getActiveUserData(servletRequest).getUserId()).toString();
     }
 
 

@@ -1,6 +1,7 @@
 package com.movie.services;
 
 import com.movie.dal.DBManager;
+import com.movie.tools.DBRowUpdateData;
 import com.movie.tools.DbDataEnums;
 import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentUserNameException;
@@ -74,4 +75,17 @@ public class UserDataManager {
         }
         return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
     }
+
+    public SimpleResponse removeUser(String userID) {
+        List<Map<String,Object>> users = dbManager.queryForList(SELECT_ALL_FROM_USERS_WHERE_+"id='" + userID + "';");
+        if (users.size() == 0){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to remove unexisting user.");
+        }
+        dbManager.executeQuery("DELETE FROM movieserverdb.users WHERE id="+userID+";");
+        return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
+
+
+    }
+
+
 }

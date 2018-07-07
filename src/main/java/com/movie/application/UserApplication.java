@@ -4,6 +4,7 @@ import com.movie.dal.DBManager;
 import com.movie.services.DataManager;
 import com.movie.services.LocksService;
 import com.movie.tools.DBRowUpdateData;
+import com.movie.tools.DbDataEnums;
 import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentUserNameException;
 
@@ -25,8 +26,15 @@ import java.util.Map;
 @Component
 public class UserApplication {
 
+    @Autowired
+    private ReviewApplication reviewApplication;
+
 @Autowired
 private DBManager dbManager;
+
+@Autowired
+private PurchaseApplication purchaseApplication;
+
 private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     public boolean decreaseUserCredits(int userID){
         return decreaseUserCredits(userID,true);
@@ -105,5 +113,28 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return DataManager.getUserDataManager().addUser(userName, password, firstName, lastName, paymentToken, role, credits);
 
 
+    }
+
+    public SimpleResponse removeUser(String userIDStr) {
+        int userId;
+        try {
+            userId = Integer.parseInt(userIDStr);
+        }catch (Exception e){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Invalid User id");
+        }
+        purchaseApplication.removePurchaseHistoryForUser(userId);
+        reviewApplication.deleteAllUserReview(userId);
+        return DataManager.getUserDataManager().removeUser(userIDStr);
+    }
+
+    public SimpleResponse addCreditsToUser(int userId, int creditsToAdd){
+        StringBuilder whereStatement = new StringBuilder();
+        whereStatement.append("id=").append(userId);
+        String setStatement = "credits = credits + " + creditsToAdd;
+        DBRowUpdateData rowUpdateData = new DBRowUpdateData(" movieserverdb.users", whereStatement.toString(),setStatement.toString());
+        if (!LocksService.setRow(rowUpdateData)){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("unable to update row");
+        }
+        return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
     }
 }

@@ -1,5 +1,6 @@
 package com.movie.services;
 
+import com.movie.application.PurchaseApplication;
 import com.movie.dal.DBManager;
 import com.movie.tools.Calculator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +26,20 @@ public class DataManager {
     private static ReviewsDataManager  reviewsDataManager;
     private static UserDataManager userDataManager;
     private static RantedMoviesDataManager rantedMoviesDataManager;
+    private static PricingDataManager pricingDataManager;
+    private static PurchaseHistoryDataManager purchaseHistoryDataManager;
 
     @Autowired
     public DataManager (MovieDataService movieDataService,
                         ReviewsDataManager  reviewsDataManager,UserDataManager userDataManager,
-                        RantedMoviesDataManager rantedMoviesDataManager ){
+                        RantedMoviesDataManager rantedMoviesDataManager ,PricingDataManager pricingDataManager,
+                        PurchaseHistoryDataManager purchaseHistoryDataManager){
         DataManager.movieDataService=movieDataService;
         DataManager.reviewsDataManager=reviewsDataManager;
         DataManager.userDataManager=userDataManager;
         DataManager.rantedMoviesDataManager=rantedMoviesDataManager;
+        DataManager.pricingDataManager=pricingDataManager;
+        DataManager.purchaseHistoryDataManager=purchaseHistoryDataManager;
     }
 
     public static MovieDataService getMovieDataService(){
@@ -50,5 +56,13 @@ public class DataManager {
 
     public static RantedMoviesDataManager getRantedMoviesDataManager(){
         return rantedMoviesDataManager;
+    }
+
+    public static PricingDataManager getPricingDataManager() {
+        return pricingDataManager;
+    }
+
+    public static PurchaseHistoryDataManager getPurchaseHistoryDataManager() {
+        return purchaseHistoryDataManager;
     }
 }

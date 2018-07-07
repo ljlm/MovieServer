@@ -40,6 +40,13 @@ public class ReviewsDataManager {
         return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to delete review.");
     }
 
+    public SimpleResponse deleteMovieRating (int userId){
+        if (dbManager.updateQuery("DELETE FROM movieserverdb.rating WHERE user_id="+userId+";") ==1){
+            return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
+        }
+        return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to delete review.");
+    }
+
     public  Map<String,Object> getUserReviewsByMovieId(int userId, int movieId){
         List<Map<String,Object>> review = dbManager.queryForList("SELECT * FROM movieserverdb.rating WHERE movie_id="+ movieId + "&& user_id="+userId+";");
         return review.get(0);

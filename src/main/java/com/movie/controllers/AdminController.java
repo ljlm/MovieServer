@@ -3,6 +3,7 @@ package com.movie.controllers;
 import java.security.InvalidParameterException;
 
 import com.movie.application.MovieApplication;
+import com.movie.application.PurchaseApplication;
 import com.movie.application.UserApplication;
 import com.movie.services.DataPopulator;
 import com.movie.services.RoleValidator;
@@ -39,16 +40,17 @@ public class AdminController {
     @Autowired
     public UserApplication userApplication;
 
+    @Autowired
+    public PurchaseApplication purchaseApplication;
 
-
-    @RequestMapping("/createtables")
+    @RequestMapping("/admin/createtables")
     public String createTables(ServletRequest servletRequest) throws InvalidRoleException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
         dataPopulator.createTables();
         return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS).toString();
     }
 
-    @RequestMapping(value = "/addmovie",  method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/movie",  method = RequestMethod.POST)
     public String addMovie (ServletRequest servletRequest ) throws InvalidRoleException, AlreadyExistentMovieException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
         String movieName = servletRequest.getParameter("movie_name");
@@ -60,7 +62,7 @@ public class AdminController {
         return movieApplication.addMovie(movieName, picLink, year, category, info, available).toString();
     }
 
-    @RequestMapping(value = "/adduser",  method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/user",  method = RequestMethod.POST)
     public String addUser (ServletRequest servletRequest ) throws InvalidRoleException, AlreadyExistentUserNameException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
         String userName = servletRequest.getParameter("user_name");
@@ -72,6 +74,36 @@ public class AdminController {
         String paymentToken = servletRequest.getParameter("payment_token");
         return userApplication.addUser(userName, password, firstName, lastName, paymentToken, role, credits).toString();
     }
+
+    @RequestMapping(value = "/admin/user",  method = RequestMethod.DELETE)
+    public String removeUser (ServletRequest servletRequest ) throws InvalidRoleException, AlreadyExistentUserNameException {
+        RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
+        String userID = servletRequest.getParameter("user_id");
+        return userApplication.removeUser(userID).toString();
+    }
+
+    @RequestMapping(value = "/admin/leaser",  method = RequestMethod.GET)
+    public String getAllRentedHistory (ServletRequest servletRequest ) throws InvalidRoleException, AlreadyExistentUserNameException {
+        RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
+        String userName = servletRequest.getParameter("user_name");
+        String password =  servletRequest.getParameter("password");
+        String firstName = servletRequest.getParameter("first_name");
+        String lastName = servletRequest.getParameter("last_name");
+        String role =  servletRequest.getParameter("role");
+        String credits = servletRequest.getParameter("credits");
+        String paymentToken = servletRequest.getParameter("payment_token");
+        return userApplication.addUser(userName, password, firstName, lastName, paymentToken, role, credits).toString();
+    }
+
+    @RequestMapping(value = "/admin/purchases",  method = RequestMethod.GET)
+    public String getAllUsersPurchaseHistory (ServletRequest servletRequest ) throws InvalidRoleException {
+        RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
+        return purchaseApplication.getAllUsersPurchaseHistory().toString();
+    }
+
+
+
+
 
 
 

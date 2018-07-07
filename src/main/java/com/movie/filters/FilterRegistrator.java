@@ -1,7 +1,10 @@
 package com.movie.filters;
 
 import com.movie.services.DataManager;
+
+import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -38,6 +41,17 @@ public class FilterRegistrator {
         filterRegBean.setUrlPatterns(urlPatterns);
         filterRegBean.setOrder(0);
         return filterRegBean;
+    }
+
+    @Bean
+    public TomcatEmbeddedServletContainerFactory tomcatEmbeddedServletContainerFactory(){
+        return new TomcatEmbeddedServletContainerFactory(){
+            @Override
+            protected void customizeConnector(Connector connector){
+                super.customizeConnector(connector);
+                connector.setParseBodyMethods("POST, PUT, DELETE");
+            }
+        };
     }
 
 

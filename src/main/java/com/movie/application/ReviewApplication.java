@@ -53,4 +53,8 @@ public class ReviewApplication {
         return reviewsDataManager.deleteMovieRating(userId,movieId);
     }
 
+    public SimpleResponse deleteAllUserReview (int userId){
+        return reviewsDataManager.deleteMovieRating(userId);
+    }
+
 }
