@@ -1,12 +1,18 @@
 package com.movie.application;
 
+import static com.movie.services.RoleValidator.ADMIN;
+import static com.movie.services.RoleValidator.USER;
+
 import com.movie.dal.DBManager;
 import com.movie.services.DataManager;
 import com.movie.services.LocksService;
+import com.movie.services.RoleValidator;
+import com.movie.tools.ActiveUser;
 import com.movie.tools.DBRowUpdateData;
 import com.movie.tools.DbDataEnums;
 import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentUserNameException;
+import com.mysql.jdbc.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -137,4 +143,40 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         }
         return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
     }
+
+    public SimpleResponse editUser(ActiveUser activeUser, String userIdStr, String userName, String password, String firstName, String lastName, String paymentToken, String roleStr, String creditsStr) {
+        int userId=-1;
+        try{
+            userId = Integer.parseInt( userIdStr);
+        }catch (Exception e){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Parameter userId=" + userIdStr + " is invalid");
+        }
+
+        int credits=-1;
+        try {
+            credits = Integer.parseInt(creditsStr);
+        }catch (Exception e){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Parameter credits=" + creditsStr + " is invalid");
+        }
+
+        int role=-1;
+        try {
+            role = Integer.parseInt(roleStr);
+            if (activeUser.getUserId() == userId ){
+                if (activeUser.getRole() == USER){
+                    role = USER;
+                }else{
+                    return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Admin user can't downgrade the role of own account.");
+                }
+            }
+
+
+        }catch (Exception e){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Parameter credits=" + creditsStr + " is invalid");
+        }
+
+        return DataManager.getUserDataManager().editUser(userId, userName, password, firstName, lastName, paymentToken, role, credits);
+
+    }
+
 }

@@ -5,6 +5,7 @@ import com.movie.tools.DBRowUpdateData;
 import com.movie.tools.DbDataEnums;
 import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentMovieException;
+import com.mysql.jdbc.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,4 +93,59 @@ public class MovieDataService {
         return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
     }
 
+    public SimpleResponse editMovie(int movieID, String movieName, String picLink, int year,
+                                    int category, String info, int available) {
+        StringBuilder whereStatement = new StringBuilder();
+        whereStatement.append("id=").append(movieID);
+        StringBuilder setStatement = new StringBuilder();
+
+        if (!StringUtils.isEmptyOrWhitespaceOnly(movieName)){
+            setStatement.append("movie_name='").append(movieName).append("' ");
+        }
+
+        if (!StringUtils.isEmptyOrWhitespaceOnly(picLink)){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" , ");
+            }
+            setStatement.append("pic_link='").append(picLink).append("' ");
+        }
+
+        if (year != -1){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" , ");
+            }
+            setStatement.append("year=").append(year).append(" ");
+        }
+
+        if (category != -1){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" , ");
+            }
+            setStatement.append("category=").append(category).append(" ");
+        }
+
+        if (!StringUtils.isEmptyOrWhitespaceOnly(info)){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" && ");
+            }
+            setStatement.append("info='").append(info).append("' ");
+        }
+
+        if (available != -1){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" , ");
+            }
+            setStatement.append("available=").append(available).append(" ");
+        }
+
+        if (setStatement.length() == 0){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Nothing to update");
+        }
+
+        DBRowUpdateData rowUpdateData = new DBRowUpdateData(" movieserverdb.movies", whereStatement.toString(),setStatement.toString());
+        if (!LocksService.setRow(rowUpdateData)){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to update movie");
+        }
+        return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
+    }
 }

@@ -9,6 +9,7 @@ import com.movie.tools.DBRowUpdateData;
 import com.movie.tools.DbDataEnums;
 import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentMovieException;
+import com.mysql.jdbc.StringUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -202,4 +203,41 @@ public class MovieApplication {
         return DataManager.getMovieDataService().addMovie(movieName,picLink,year,category,info,available);
     }
 
+    public SimpleResponse editMovie(String movieIdStr, String movieName, String picLink, String yearStr, String categoryStr, String info, String availableStr) {
+        int movieId;
+        try{
+            movieId = Integer.parseInt( movieIdStr);
+        }catch (Exception e){
+            return new SimpleResponse().setCause("Parameter year=" + yearStr + " is invalid").setResult(DbDataEnums.result.FAILURE);
+        }
+
+        int year =-1;
+        if (!StringUtils.isEmptyOrWhitespaceOnly(yearStr)) {
+            try {
+                year = Integer.parseInt(yearStr);
+            } catch (Exception e) {
+                return new SimpleResponse().setCause("Parameter year=" + yearStr + " is invalid").setResult(DbDataEnums.result.FAILURE);
+            }
+        }
+
+
+        int category=-1;
+        if (!StringUtils.isEmptyOrWhitespaceOnly(categoryStr)) {
+            try {
+                category = Integer.parseInt(categoryStr);
+            } catch (Exception e) {
+                return new SimpleResponse().setCause("Parameter category=" + categoryStr + " is invalid").setResult(DbDataEnums.result.FAILURE);
+            }
+        }
+
+        int available=-1;
+        if (!StringUtils.isEmptyOrWhitespaceOnly(availableStr)) {
+            try {
+                available = Integer.parseInt(availableStr);
+            } catch (Exception e) {
+                return new SimpleResponse().setCause("Parameter available=" + availableStr + " is invalid").setResult(DbDataEnums.result.FAILURE);
+            }
+        }
+        return DataManager.getMovieDataService().editMovie(movieId ,movieName,picLink,year,category,info,available);
+    }
 }

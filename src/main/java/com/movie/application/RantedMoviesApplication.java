@@ -15,6 +15,10 @@ public class RantedMoviesApplication {
         return DataManager.getRantedMoviesDataManager().getUserLeaseHistory(userId);
     }
 
+    public List<Map<String, Object>> getAllRantedMovieLog(){
+        return DataManager.getRantedMoviesDataManager().getAllLeaseHistory();
+    }
+
     public boolean isMovieRantedByUser(int userId, int movieID){
         return DataManager.getRantedMoviesDataManager().isMovieRantedByUser(userId,movieID);
     }

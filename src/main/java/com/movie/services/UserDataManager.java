@@ -6,6 +6,7 @@ import com.movie.tools.DbDataEnums;
 import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentUserNameException;
 import com.movie.tools.errors.UnauthorizedException;
+import com.mysql.jdbc.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,4 +89,66 @@ public class UserDataManager {
     }
 
 
+    public SimpleResponse editUser(int userId, String userName, String password, String firstName, String lastName,
+                                   String paymentToken, int role,  int credits) {
+        StringBuilder whereStatement = new StringBuilder();
+        whereStatement.append("id=").append(userId);
+        StringBuilder setStatement = new StringBuilder();
+
+        if (!StringUtils.isEmptyOrWhitespaceOnly(userName)){
+            setStatement.append("user_name='").append(userName).append("' ");
+        }
+
+        if (!StringUtils.isEmptyOrWhitespaceOnly(password)){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" , ");
+            }
+            setStatement.append("password='").append(password).append("' ");
+        }
+
+        if (!StringUtils.isEmptyOrWhitespaceOnly(firstName)){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" , ");
+            }
+            setStatement.append("firstName='").append(firstName).append("' ");
+        }
+
+        if (!StringUtils.isEmptyOrWhitespaceOnly(lastName)){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" , ");
+            }
+            setStatement.append("lastName=").append(lastName).append(" ");
+        }
+
+        if (!StringUtils.isEmptyOrWhitespaceOnly(paymentToken)){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" && ");
+            }
+            setStatement.append("paymentToken='").append(paymentToken).append("' ");
+        }
+
+        if (role != -1){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" , ");
+            }
+            setStatement.append("role=").append(role).append(" ");
+        }
+
+        if (credits != -1){
+            if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
+                setStatement.append(" , ");
+            }
+            setStatement.append("credits=").append(credits).append(" ");
+        }
+
+        if (setStatement.length() == 0){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Nothing to update");
+        }
+
+        DBRowUpdateData rowUpdateData = new DBRowUpdateData(" movieserverdb.users", whereStatement.toString(),setStatement.toString());
+        if (!LocksService.setRow(rowUpdateData)){
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to update movie");
+        }
+        return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
+    }
 }
