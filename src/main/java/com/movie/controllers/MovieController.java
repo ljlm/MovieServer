@@ -72,5 +72,10 @@ public class MovieController {
         return movieApplication.unleaseMovie(movieID, ActiveUser.getActiveUserData(servletRequest).getUserId()).toString();
     }
 
+    @RequestMapping(value = "/search/{searchPatern}", method = RequestMethod.GET)
+    public String searchForMovies(@PathVariable String searchPatern){
+        return JsonTools.convertToJson(movieApplication.searchForMovies(searchPatern));
+    }
+
 
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,10 @@ public class MovieDataService {
         List<Map<String,Object>> movies = dbManager.queryForList(SELECT_ALL_FROM_MOVIES_WHERE_+"category="+category+  ";");
         return movies;
     }
+
+
+
+
 
 //    public void updateMovieRating (Integer movieID, String rating, int raters) throws Exception {
 //        StringBuilder selectLinequery = new StringBuilder();
@@ -148,4 +153,31 @@ public class MovieDataService {
         }
         return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
     }
+
+    public List<Map<String,Object>> searchForMovies(List<String> keyWords) {
+        List<Map<String,Object>> movies = new ArrayList<>();
+        if (keyWords.size()==0){
+            return getMovieList ();
+        }
+        movies.addAll(dbManager.queryForList(createWhereSearchQuery("SELECT * FROM movieserverdb.movies","movie_name", keyWords)));
+        movies.addAll(dbManager.queryForList(createWhereSearchQuery("SELECT * FROM movieserverdb.movies","info", keyWords)));
+//        movies.addAll(dbManager.queryForList(createWhereSearchQuery("SELECT * FROM movieserverdb.rating","comment", keyWords)));
+        return movies;
+    }
+
+    private String createWhereSearchQuery(String selectStatement, String columnName, List<String> keyWords){
+        StringBuilder query  = new StringBuilder();
+        query.append(selectStatement).append(" WHERE ");
+        boolean isFirst=true;
+        for (String keyWord : keyWords){
+            if (!isFirst){
+                query.append(" or ");
+            }
+            query.append(columnName + " LIKE '%"+keyWord).append("%'");
+            isFirst=false;
+        }
+        query.append(";");
+        return query.toString();
+    }
+
 }

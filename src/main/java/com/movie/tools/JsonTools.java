@@ -6,13 +6,18 @@ import java.util.Set;
 public class JsonTools {
     private static String [] fieldToHide = {"locked" , "password"};
 
-    private static String convertToJsonFunc(Object obj){
+    private static String convertToJsonFunc(Object obj) {
         StringBuffer sb = new StringBuffer();
 
-        if (obj instanceof String || obj instanceof Integer || obj instanceof Float){
+        if (obj instanceof Integer || obj instanceof Float) {
             return "\"" + obj + "\"";
 
-        } else if (obj instanceof List){
+        }else if (obj instanceof String){
+            String objStr = (String) obj;
+            objStr = objStr.replace("\"", "\\\"");
+            return "\"" + objStr + "\"";
+
+        }else if (obj instanceof List){
             sb.append("[");
             boolean first = true;
             for (Object element : (List)obj) {

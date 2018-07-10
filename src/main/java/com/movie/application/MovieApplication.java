@@ -240,4 +240,9 @@ public class MovieApplication {
         }
         return DataManager.getMovieDataService().editMovie(movieId ,movieName,picLink,year,category,info,available);
     }
+
+    public List<Map<String,Object>> searchForMovies(String searchPatern) {
+        List<String> keyWords = Arrays.asList(searchPatern.split(","));
+        return DataManager.getMovieDataService().searchForMovies(keyWords);
+    }
 }
