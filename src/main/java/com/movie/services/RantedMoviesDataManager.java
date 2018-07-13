@@ -16,7 +16,7 @@ public class RantedMoviesDataManager {
     public DBManager dbManager;
 
     public List<Map<String,Object>> getAllLeaseHistory(){
-        String query = "SELECT * FROM movieserverdb.rented_movies  ;";
+        String query = "SELECT * FROM movieserverdb.rented_movies r, movieserverdb.movies m, movieserverdb.users u WHERE r.user_id=u.id && r.movie_id=m.id ;";
         List<Map<String,Object>> userReviews = dbManager.queryForList(query);
         return userReviews;
     }

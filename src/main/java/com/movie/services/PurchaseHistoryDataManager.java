@@ -30,7 +30,7 @@ public class PurchaseHistoryDataManager {
     public DBManager dbManager;
 
     public List<Map<String,Object>> getAllUsersPurchaseHistory (){
-        List<Map<String,Object>> purchaseHistory  = dbManager.queryForList("SELECT * from movieserverdb.purchase_history;");
+        List<Map<String,Object>> purchaseHistory  = dbManager.queryForList("SELECT * from movieserverdb.purchase_history p, movieserverdb.users u WHERE p.user_id=u.id  ;");
         return purchaseHistory;
     }
 
