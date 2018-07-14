@@ -121,7 +121,7 @@ public class AdminController {
     @RequestMapping(value = "/admin/purchases",  method = RequestMethod.GET)
     public String getAllUsersPurchaseHistory (ServletRequest servletRequest ) throws InvalidRoleException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
-        return purchaseApplication.getAllUsersPurchaseHistory().toString();
+        return JsonTools.convertToJson(purchaseApplication.getAllUsersPurchaseHistory());
     }
 
 
