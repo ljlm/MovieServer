@@ -30,7 +30,8 @@ public class DataPopulator {
                 ",PRIMARY KEY (id))");
         String insertQuery = "INSERT INTO categories (id , category_name) VALUES (?, ?) ";
         int[] types = new int[] { Types.INTEGER,Types.VARCHAR};
-        Object[] params = new Object[] { 9,"horror"};
+
+        Object[] params = new Object[] { 0,"All Movies"};
         dbManager.insertQuery(insertQuery, params, types);
 
         params = new Object[] { 1,"crime"};
@@ -57,6 +58,8 @@ public class DataPopulator {
         params = new Object[] { 8,"thriller"};
         dbManager.insertQuery(insertQuery, params, types);
 
+        params = new Object[] { 9,"horror"};
+        dbManager.insertQuery(insertQuery, params, types);
 
         dbManager.executeQuery("drop table if exists users ");
         dbManager.executeQuery("CREATE TABLE users(id int NOT NULL AUTO_INCREMENT " +

@@ -159,19 +159,31 @@ public class MovieDataService {
         if (keyWords.size()==0){
             return getMovieList ();
         }
-        movies.addAll(dbManager.queryForList(createWhereSearchQuery("SELECT * FROM movieserverdb.movies","movie_name", keyWords)));
-        movies.addAll(dbManager.queryForList(createWhereSearchQuery("SELECT * FROM movieserverdb.movies","info", keyWords)));
-//        movies.addAll(dbManager.queryForList(createWhereSearchQuery("SELECT * FROM movieserverdb.rating","comment", keyWords)));
+
+        movies.addAll(dbManager.queryForList(createWhereExactSearchQuery("SELECT * FROM movieserverdb.movies","movie_name", keyWords)));
+        if (movies.isEmpty()) {
+            movies.addAll(dbManager.queryForList(createWhereLoseSearchQuery("SELECT * FROM movieserverdb.movies", "movie_name", keyWords)));
+            movies.addAll(dbManager.queryForList(createWhereLoseSearchQuery("SELECT * FROM movieserverdb.movies", "info", keyWords)));
+        }
+        //        movies.addAll(dbManager.queryForList(createWhereSearchQuery("SELECT * FROM movieserverdb.rating","comment", keyWords)));
         return movies;
     }
 
-    private String createWhereSearchQuery(String selectStatement, String columnName, List<String> keyWords){
+    private String createWhereLoseSearchQuery(String selectStatement, String columnName, List<String> keyWords){
+        return createWhereSearchQuery("or",selectStatement,columnName,keyWords);
+    }
+
+    private String createWhereExactSearchQuery(String selectStatement, String columnName, List<String> keyWords){
+        return createWhereSearchQuery("and",selectStatement,columnName,keyWords);
+    }
+
+    private String createWhereSearchQuery(String operator, String selectStatement, String columnName, List<String> keyWords){
         StringBuilder query  = new StringBuilder();
         query.append(selectStatement).append(" WHERE ");
         boolean isFirst=true;
         for (String keyWord : keyWords){
             if (!isFirst){
-                query.append(" or ");
+                query.append(" " + operator + " ");
             }
             query.append(columnName + " LIKE '%"+keyWord).append("%'");
             isFirst=false;
@@ -179,5 +191,7 @@ public class MovieDataService {
         query.append(";");
         return query.toString();
     }
+
+
 
 }
