@@ -3,6 +3,7 @@ package com.movie.services;
 import com.movie.dal.DBManager;
 import com.movie.tools.DBRowUpdateData;
 import com.movie.tools.DbDataEnums;
+import com.movie.tools.Filter;
 import com.movie.tools.SimpleResponse;
 import com.movie.tools.errors.AlreadyExistentMovieException;
 import com.mysql.jdbc.StringUtils;
@@ -162,8 +163,13 @@ public class MovieDataService {
 
         movies.addAll(dbManager.queryForList(createWhereExactSearchQuery("SELECT * FROM movieserverdb.movies","movie_name", keyWords)));
         if (movies.isEmpty()) {
-            movies.addAll(dbManager.queryForList(createWhereLoseSearchQuery("SELECT * FROM movieserverdb.movies", "movie_name", keyWords)));
-            movies.addAll(dbManager.queryForList(createWhereLoseSearchQuery("SELECT * FROM movieserverdb.movies", "info", keyWords)));
+            List<String> filteredKeywords = Filter.purifyKeywords(keyWords);
+            if (filteredKeywords.size()>0){
+                movies.addAll(dbManager.queryForList(createWhereLoseSearchQuery("SELECT * FROM movieserverdb.movies", "movie_name", keyWords)));
+                movies.addAll(dbManager.queryForList(createWhereLoseSearchQuery("SELECT * FROM movieserverdb.movies",
+                        "info", filteredKeywords)));
+            }
+
         }
         //        movies.addAll(dbManager.queryForList(createWhereSearchQuery("SELECT * FROM movieserverdb.rating","comment", keyWords)));
         return movies;

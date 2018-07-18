@@ -18,6 +18,7 @@ import com.movie.tools.errors.InvalidRoleException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -112,16 +113,29 @@ public class AdminController {
         return userApplication.removeUser(userID).toString();
     }
 
+
+    @RequestMapping(value = "/admin/purchases",  method = RequestMethod.GET)
+    public String getAllUsersPurchaseHistory (ServletRequest servletRequest ) throws InvalidRoleException {
+        RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
+        return JsonTools.convertToJson(purchaseApplication.getAllUsersPurchaseHistory());
+    }
+
     @RequestMapping(value = "/admin/leaser",  method = RequestMethod.GET)
     public String getAllRentedHistory (ServletRequest servletRequest ) throws InvalidRoleException, AlreadyExistentUserNameException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
         return JsonTools.convertToJson(rantedMoviesApplication.getAllRantedMovieLog());
     }
 
-    @RequestMapping(value = "/admin/purchases",  method = RequestMethod.GET)
-    public String getAllUsersPurchaseHistory (ServletRequest servletRequest ) throws InvalidRoleException {
+    @RequestMapping( value = "/admin/leaser/{movieID}/{userID}", method = RequestMethod.PUT)
+    public String leaseMovieForUser(@PathVariable Integer movieID, @PathVariable Integer userId, ServletRequest servletRequest ) throws InvalidRoleException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
-        return JsonTools.convertToJson(purchaseApplication.getAllUsersPurchaseHistory());
+        return movieApplication.leaseMovie(movieID, userId).toString();
+    }
+
+    @RequestMapping( value = "/admin/leaser/{movieID}/{userID}", method = RequestMethod.DELETE)
+    public String unleaseMovieForUser(@PathVariable Integer movieID, @PathVariable Integer userId, ServletRequest servletRequest) throws InvalidRoleException {
+        RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
+        return movieApplication.unleaseMovie(movieID, userId).toString();
     }
 
 
