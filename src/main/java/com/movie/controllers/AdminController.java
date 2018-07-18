@@ -127,15 +127,15 @@ public class AdminController {
     }
 
     @RequestMapping( value = "/admin/leaser/{movieID}/{userID}", method = RequestMethod.PUT)
-    public String leaseMovieForUser(@PathVariable Integer movieID, @PathVariable Integer userId, ServletRequest servletRequest ) throws InvalidRoleException {
+    public String leaseMovieForUser(@PathVariable Integer movieID, @PathVariable Integer userID, ServletRequest servletRequest ) throws InvalidRoleException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
-        return movieApplication.leaseMovie(movieID, userId).toString();
+        return movieApplication.leaseMovie(movieID, userID).toString();
     }
 
     @RequestMapping( value = "/admin/leaser/{movieID}/{userID}", method = RequestMethod.DELETE)
-    public String unleaseMovieForUser(@PathVariable Integer movieID, @PathVariable Integer userId, ServletRequest servletRequest) throws InvalidRoleException {
+    public String unleaseMovieForUser(@PathVariable Integer movieID, @PathVariable Integer userID, ServletRequest servletRequest) throws InvalidRoleException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
-        return movieApplication.unleaseMovie(movieID, userId).toString();
+        return movieApplication.unleaseMovie(movieID, userID).toString();
     }
 
 
