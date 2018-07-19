@@ -113,8 +113,14 @@ public class AdminController {
         return userApplication.removeUser(userID).toString();
     }
 
+    @RequestMapping(value = "/admin/users",  method = RequestMethod.GET)
+    public String getAllUsers (ServletRequest servletRequest ) throws InvalidRoleException, AlreadyExistentUserNameException {
+        RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
+        return JsonTools.convertToJson(userApplication.getAllUsers());
+    }
 
-    @RequestMapping(value = "/admin/purchases",  method = RequestMethod.GET)
+
+        @RequestMapping(value = "/admin/purchases",  method = RequestMethod.GET)
     public String getAllUsersPurchaseHistory (ServletRequest servletRequest ) throws InvalidRoleException {
         RoleValidator.validateAdmin(ActiveUser.getActiveUserData(servletRequest).getRole());
         return JsonTools.convertToJson(purchaseApplication.getAllUsersPurchaseHistory());

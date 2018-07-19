@@ -29,6 +29,12 @@ public class UserDataManager {
     @Autowired
     public DBManager dbManager;
 
+
+    public List<Map<String, Object>> getAllUsers (){
+        List<Map<String,Object>> users = dbManager.queryForList("SELECT * FROM movieserverdb.users ;");
+        return users;
+    }
+
     public Map<String, Object> getUserById (Integer id){
         List<Map<String,Object>> user = dbManager.queryForList(SELECT_ALL_FROM_USERS_WHERE_+" id="+id + ";");
         return user.get(0);
@@ -117,7 +123,7 @@ public class UserDataManager {
             if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
                 setStatement.append(" , ");
             }
-            setStatement.append("lastName=").append(lastName).append(" ");
+            setStatement.append("lastName='").append(lastName).append("' ");
         }
 
         if (!StringUtils.isEmptyOrWhitespaceOnly(paymentToken)){

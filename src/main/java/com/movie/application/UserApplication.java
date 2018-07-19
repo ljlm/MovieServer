@@ -102,16 +102,20 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
     public SimpleResponse addUser(String userName, String password, String firstName, String lastName, String paymentToken, String roleStr, String creditsStr) throws AlreadyExistentUserNameException {
-        int role;
+        int role=USER;
         try{
-            role = Integer.parseInt(roleStr);
+            if (roleStr != null){
+                role = Integer.parseInt(roleStr);
+            }
         }catch (Exception e){
             throw new InvalidParameterException("Parameter role=" + roleStr + " is invalid");
         }
 
-        int credits;
+        int credits=0;
         try{
-            credits = Integer.parseInt(creditsStr);
+            if (creditsStr != null){
+                credits = Integer.parseInt(creditsStr);
+            }
         }catch (Exception e){
             throw new InvalidParameterException("Parameter credits=" + creditsStr + " is invalid");
         }
@@ -154,19 +158,23 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         int credits=-1;
         try {
-            credits = Integer.parseInt(creditsStr);
+            if (creditsStr != null){
+                credits = Integer.parseInt(creditsStr);
+            }
         }catch (Exception e){
             return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Parameter credits=" + creditsStr + " is invalid");
         }
 
         int role=-1;
         try {
-            role = Integer.parseInt(roleStr);
-            if (activeUser.getUserId() == userId ){
-                if (activeUser.getRole() == USER){
-                    role = USER;
-                }else{
-                    return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Admin user can't downgrade the role of own account.");
+            if (roleStr != null) {
+                role = Integer.parseInt(roleStr);
+                if (activeUser.getUserId() == userId) {
+                    if (activeUser.getRole() == USER) {
+                        role = USER;
+                    } else {
+                        return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Admin user can't downgrade the role of own account.");
+                    }
                 }
             }
 
@@ -179,4 +187,7 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     }
 
+    public List<Map<String,Object>> getAllUsers() {
+        return DataManager.getUserDataManager().getAllUsers ();
+    }
 }

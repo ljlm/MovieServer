@@ -157,6 +157,7 @@ public class MovieDataService {
 
     public List<Map<String,Object>> searchForMovies(List<String> keyWords) {
         List<Map<String,Object>> movies = new ArrayList<>();
+        List<Map<String,Object>> moviesLoseSearch = new ArrayList<>();
         if (keyWords.size()==0){
             return getMovieList ();
         }
@@ -165,13 +166,25 @@ public class MovieDataService {
         if (movies.isEmpty()) {
             List<String> filteredKeywords = Filter.purifyKeywords(keyWords);
             if (filteredKeywords.size()>0){
-                movies.addAll(dbManager.queryForList(createWhereLoseSearchQuery("SELECT * FROM movieserverdb.movies", "movie_name", keyWords)));
-                movies.addAll(dbManager.queryForList(createWhereLoseSearchQuery("SELECT * FROM movieserverdb.movies",
+                moviesLoseSearch.addAll(dbManager.queryForList(createWhereLoseSearchQuery("SELECT * FROM movieserverdb.movies",
+                        "movie_name", filteredKeywords)));
+                moviesLoseSearch.addAll(dbManager.queryForList(createWhereLoseSearchQuery("SELECT * FROM movieserverdb.movies",
                         "info", filteredKeywords)));
             }
 
+            for (Map<String,Object> movieLoseSearch : moviesLoseSearch){
+                boolean found = false;
+                for (Map<String,Object> movie : movies){
+                      if (movie.get("id") == movieLoseSearch.get("id")){
+                          found=true;
+                      }
+                }
+                if (!found){
+                    movies.add(movieLoseSearch);
+                }
+            }
+
         }
-        //        movies.addAll(dbManager.queryForList(createWhereSearchQuery("SELECT * FROM movieserverdb.rating","comment", keyWords)));
         return movies;
     }
 
