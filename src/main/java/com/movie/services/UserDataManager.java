@@ -130,7 +130,7 @@ public class UserDataManager {
             if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
                 setStatement.append(" && ");
             }
-            setStatement.append("paymentToken='").append(paymentToken).append("' ");
+            setStatement.append("payment_token='").append(paymentToken).append("' ");
         }
 
         if (role != -1){
