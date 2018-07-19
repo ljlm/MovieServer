@@ -116,14 +116,14 @@ public class UserDataManager {
             if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
                 setStatement.append(" , ");
             }
-            setStatement.append("firstName='").append(firstName).append("' ");
+            setStatement.append("first_name='").append(firstName).append("' ");
         }
 
         if (!StringUtils.isEmptyOrWhitespaceOnly(lastName)){
             if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
                 setStatement.append(" , ");
             }
-            setStatement.append("lastName='").append(lastName).append("' ");
+            setStatement.append("last_name='").append(lastName).append("' ");
         }
 
         if (!StringUtils.isEmptyOrWhitespaceOnly(paymentToken)){
@@ -153,7 +153,7 @@ public class UserDataManager {
 
         DBRowUpdateData rowUpdateData = new DBRowUpdateData(" movieserverdb.users", whereStatement.toString(),setStatement.toString());
         if (!LocksService.setRow(rowUpdateData)){
-            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to update movie");
+            return new SimpleResponse().setResult(DbDataEnums.result.FAILURE).setCause("Unable to update user");
         }
         return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
     }
