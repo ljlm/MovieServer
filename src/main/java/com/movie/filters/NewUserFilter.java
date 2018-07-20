@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import com.movie.services.DataManager;
 import com.movie.tools.ActiveUser;
+import com.movie.tools.errors.AlreadyExistentUserNameException;
 import com.movie.tools.errors.UnauthorizedException;
 
 import java.io.IOException;
@@ -34,16 +35,19 @@ public class NewUserFilter implements Filter {
         String pass= wrappedRequest.getParameter("password");
         String fName = wrappedRequest.getParameter("first_name");
         String lName = wrappedRequest.getParameter("last_name");
+        String paymentToken = wrappedRequest.getParameter("payment_token");
 
         if (DataManager.getUserDataManager().isUserNameRegistered(userName)){
             throw new SecurityException("Username already exist.");
         }
-        DataManager.getUserDataManager().insertUser(userName, pass, fName, lName);
         Map user;
         try {
+             DataManager.getUserDataManager().addUser(userName, pass, fName, lName,paymentToken,1,0);
             user = DataManager.getUserDataManager().getUserIdIfExists(userName, pass);
         } catch (Exception e) {
             throw new SecurityException(e.getCause());
+        } catch (AlreadyExistentUserNameException e) {
+            throw new SecurityException("Username already exist.");
         }
         ActiveUser activeUser = new ActiveUser((String) user.get("user_name"),(int)user.get("id"), (int)user.get("role"));
         session.setAttribute("activeUser", activeUser);
