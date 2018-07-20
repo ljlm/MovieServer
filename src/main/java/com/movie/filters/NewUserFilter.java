@@ -30,10 +30,11 @@ public class NewUserFilter implements Filter {
         HttpSession session = ((HttpServletRequest) servletRequest).getSession(true);
         session.setAttribute("newuser",true);
 
-        String userName= wrappedRequest.getParameter("username");
+        String userName= wrappedRequest.getParameter("user_name");
         String pass= wrappedRequest.getParameter("password");
-        String fName = wrappedRequest.getParameter("firstname");
-        String lName = wrappedRequest.getParameter("lastname");
+        String fName = wrappedRequest.getParameter("first_name");
+        String lName = wrappedRequest.getParameter("last_name");
+
         if (DataManager.getUserDataManager().isUserNameRegistered(userName)){
             throw new SecurityException("Username already exist.");
         }

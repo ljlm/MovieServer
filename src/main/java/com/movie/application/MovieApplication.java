@@ -242,7 +242,7 @@ public class MovieApplication {
     }
 
     public List<Map<String,Object>> searchForMovies(String searchPatern) {
-        List<String> keyWords = Arrays.asList(searchPatern.split(" "));
+        List<String> keyWords = Arrays.asList(searchPatern.split(","));
         return DataManager.getMovieDataService().searchForMovies(keyWords);
     }
 }

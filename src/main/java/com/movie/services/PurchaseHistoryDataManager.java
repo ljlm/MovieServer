@@ -27,7 +27,7 @@ public class PurchaseHistoryDataManager {
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Autowired
-    public DBManager dbManager;
+    public DBManager dbManager ;
 
     public List<Map<String,Object>> getAllUsersPurchaseHistory (){
         List<Map<String,Object>> purchaseHistory  = dbManager.queryForList("SELECT * from movieserverdb.purchase_history p, movieserverdb.users u WHERE p.user_id=u.id  ;");

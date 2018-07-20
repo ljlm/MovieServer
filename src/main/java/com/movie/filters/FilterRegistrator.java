@@ -18,8 +18,6 @@ import java.util.List;
 @Component
 public class FilterRegistrator {
 
-//    @Autowired
-//    public DataManager dataManager;
 
     @Bean
     public FilterRegistrationBean authenticationFilter(){

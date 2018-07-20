@@ -128,7 +128,7 @@ public class UserDataManager {
 
         if (!StringUtils.isEmptyOrWhitespaceOnly(paymentToken)){
             if(setStatement.length() != 0 && !setStatement.substring(setStatement.length()-2).equals(',')){
-                setStatement.append(" && ");
+                setStatement.append(" , ");
             }
             setStatement.append("payment_token='").append(paymentToken).append("' ");
         }
