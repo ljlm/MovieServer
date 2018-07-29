@@ -7,6 +7,11 @@ import org.springframework.stereotype.Component;
 
 import com.movie.services.DataManager;
 
+/**
+ * this class provides the logic for the Movie rented history related operation
+ * called by endpoints or another application that requires usage of movie rented history related methods
+ */
+
 @Component
 public class RantedMoviesApplication {
 

@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by lionelm on 2/25/2017.
- */
+
 @EnableAutoConfiguration
 @Service
 
@@ -14,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 public class DataManager {
 
-    private static MovieDataService movieDataService;
+    private static MovieDataManager movieDataManager;
     private static ReviewsDataManager  reviewsDataManager;
     private static UserDataManager userDataManager;
     private static RantedMoviesDataManager rantedMoviesDataManager;
@@ -22,11 +20,11 @@ public class DataManager {
     private static PurchaseHistoryDataManager purchaseHistoryDataManager;
 
     @Autowired
-    public DataManager (MovieDataService movieDataService,
+    public DataManager (MovieDataManager movieDataManager,
                         ReviewsDataManager  reviewsDataManager,UserDataManager userDataManager,
                         RantedMoviesDataManager rantedMoviesDataManager ,PricingDataManager pricingDataManager,
                         PurchaseHistoryDataManager purchaseHistoryDataManager){
-        DataManager.movieDataService=movieDataService;
+        DataManager.movieDataManager = movieDataManager;
         DataManager.reviewsDataManager=reviewsDataManager;
         DataManager.userDataManager=userDataManager;
         DataManager.rantedMoviesDataManager=rantedMoviesDataManager;
@@ -34,8 +32,8 @@ public class DataManager {
         DataManager.purchaseHistoryDataManager=purchaseHistoryDataManager;
     }
 
-    public static MovieDataService getMovieDataService(){
-        return movieDataService;
+    public static MovieDataManager getMovieDataManager(){
+        return movieDataManager;
     }
 
     public static ReviewsDataManager getReviewsDataManager(){

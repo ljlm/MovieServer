@@ -1,7 +1,7 @@
 package com.movie.tools;
 
 /**
- * Created by lionelm on 1/14/2017.
+ * Enums for db usage
  */
 public class DbDataEnums {
 

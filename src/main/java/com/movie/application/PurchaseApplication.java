@@ -11,8 +11,11 @@ import com.movie.tools.Calculator;
 import com.movie.tools.DbDataEnums;
 import com.movie.tools.SimpleResponse;
 
+
+
 /**
- * Created by lionelm on 6/28/2017.
+ * this class provides the logic for the purchase related operation
+ * called by endpoints or another application that requires usage of purchase related methods
  */
 @Component
 public class PurchaseApplication {

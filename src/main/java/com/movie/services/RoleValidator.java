@@ -3,8 +3,9 @@ package com.movie.services;
 import com.movie.tools.errors.InvalidRoleException;
 
 /**
- * Created by lionelm on 7/5/2017.
+ * This service validates the role to be admin.
  */
+
 public class RoleValidator {
     public static int ADMIN = 0 ;
     public static int USER = 1;

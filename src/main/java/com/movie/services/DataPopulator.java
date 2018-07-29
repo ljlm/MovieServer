@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 import java.sql.Types;
 
 /**
- * Created by lionelm on 2/25/2017.
+ * this service populates the db with pre-defined data
  */
+
 @EnableAutoConfiguration
 @Service
 

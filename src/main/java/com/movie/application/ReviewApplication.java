@@ -16,8 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
 /**
- * Created by lionelm on 6/28/2017.
+ * this class provides the logic for the Reviews related operation
+ * called by endpoints or another application that requires usage of reviews related methods
  */
 @Component
 public class ReviewApplication {

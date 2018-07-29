@@ -14,9 +14,7 @@ import java.util.Random;
 
 import static com.movie.tools.constants.DBConstants.*;
 
-/**
- * Created by lionelm on 6/28/2017.
- */
+
 
 @Service
 public class LocksService {
@@ -80,7 +78,8 @@ public class LocksService {
     }
 
 
-
+// this method is in charge of set the data in a row in a secured way. it first
+    // locks the row and then changes the value
 
     public static boolean setRow (DBRowUpdateData rowBlockerData){
         int retryCounter=0;
@@ -119,7 +118,8 @@ public class LocksService {
         return false;
     }
 
-
+// this method tries to lock multiple rows. if one of them is unsuccessful then it releases
+    //all the rows
     public static boolean lockMultipleRows(List<DBRowLockerData> rows){
         List<DBRowLockerData> lockedByMeRows = new ArrayList<>();
         boolean isSucessful= true;

@@ -12,10 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 /**
- * Created by lionelm on 6/28/2017.
+ * This service is resposable for creating the necessary queries
+ * for movie reviews related requests to db
  */
+
 @Service
 public class ReviewsDataManager {
     @Autowired

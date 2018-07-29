@@ -1,8 +1,6 @@
 package com.movie.tools;
 
-/**
- * Created by lionelm on 7/3/2017.
- */
+
 public class DBRowLockerData {
     private String dbName;
     private String whereStatement;

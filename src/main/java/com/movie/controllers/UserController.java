@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
-
 /**
- * Created by lionelm on 6/28/2017.
+ * This class holds the endpoints for user requests.
  */
+
 @EnableAutoConfiguration
 @RestController
 public class UserController {

@@ -1,7 +1,7 @@
 package com.movie.tools;
 
 /**
- * Created by lionelm on 7/3/2017.
+ * this class holds data to update rows in db
  */
 public class DBRowUpdateData extends DBRowLockerData {
     private String setStatement;

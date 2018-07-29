@@ -19,8 +19,10 @@ import static com.movie.tools.constants.UsersDBConstants.SELECT_ALL_FROM_USERS_W
 import static java.awt.SystemColor.info;
 
 /**
- * Created by lionelm on 6/28/2017.
+ * This service is resposable for creating the necessary queries
+ * for user related requests to db
  */
+
 @Service
 public class UserDataManager {
     private String inserQuery = "INSERT INTO users (user_name, password, first_name, last_name,payment_token ,role ,credits,locked) VALUES (?,?,?, ?, ?, ?,?,?) ";

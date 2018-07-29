@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.movie.dal.DBManager;
-
+/**
+ * This service is resposable for creating the necessary queries
+ * for movie lease related requests to db
+ */
 @Service
 public class RantedMoviesDataManager {
 

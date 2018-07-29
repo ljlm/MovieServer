@@ -14,7 +14,9 @@ import java.util.Map;
 
 
 /**
- * Created by lionelm on 3/15/2017.
+ * This filter creates a user in case of path /newuser.
+ * Verifies that the username is not already in use and creates
+ * a user with the parameters specified on the request
  */
 
 

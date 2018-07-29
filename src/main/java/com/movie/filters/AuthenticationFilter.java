@@ -12,10 +12,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 import java.util.Map;
 
-
 /**
- * Created by lionelm on 3/15/2017.
+ * This filter verifies the credentials in the request before passing the request to the server.
+ * if the credentials are valid then the filter passes the request to next filter chain.
  */
+
+
 
 public class AuthenticationFilter implements Filter {
 

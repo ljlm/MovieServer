@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-
 /**
- * Created by lionelm on 6/15/2017.
+ * This service automaticly starts the calculation of movies rating process.
  */
+
 
 
 

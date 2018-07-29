@@ -3,6 +3,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * this tool parses json into string arrays
+ * is able to hide some of the fields
+ */
 public class JsonTools {
     private static String [] fieldToHide = {"locked" , "password"};
 

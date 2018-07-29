@@ -17,9 +17,7 @@ import com.movie.dal.DBManager;
 import com.movie.tools.DbDataEnums;
 import com.movie.tools.SimpleResponse;
 
-/**
- * Created by lionelm on 6/28/2017.
- */
+
 @Service
 public class PricingDataManager {
     private String insertQuery = "INSERT INTO pricing (units ,price) VALUES (?, ? ) ";

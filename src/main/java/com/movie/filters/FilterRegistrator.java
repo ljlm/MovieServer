@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by lionelm on 3/15/2017.
+ * this class creates the filters as beans, set their path and order of operation
  */
 @Component
 public class FilterRegistrator {

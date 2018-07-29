@@ -24,6 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletRequest;
 
+/**
+ * This class holds the endpoints for admin requests.
+ */
+
 @EnableAutoConfiguration
 @RestController
 

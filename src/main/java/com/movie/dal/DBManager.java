@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Created by lionelm on 1/7/2017.
+ * this class interacts directly with the db
  */
 
 @Repository

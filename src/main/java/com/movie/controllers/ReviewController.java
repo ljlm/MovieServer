@@ -20,9 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by lionelm on 6/28/2017.
+ * This class holds the endpoints for reviews related requests.
  */
-
 @EnableAutoConfiguration
 @RestController
 public class ReviewController {

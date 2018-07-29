@@ -5,8 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by lionelm on 1/7/2017.
+ * this class holds the current active user after passing authentication
  */
+
 public class ActiveUser {
     private String username;
     private int userId;

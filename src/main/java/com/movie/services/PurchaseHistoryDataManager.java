@@ -18,8 +18,10 @@ import com.movie.tools.DbDataEnums;
 import com.movie.tools.SimpleResponse;
 
 /**
- * Created by lionelm on 6/28/2017.
+ * This service is resposable for creating the necessary queries
+ * for credits purchase history related requests to db
  */
+
 @Service
 public class PurchaseHistoryDataManager {
     private String insertQuery = "INSERT INTO purchase_history (user_id ,amount, price, date,locked) VALUES (?, ?,?,?,? ) ";

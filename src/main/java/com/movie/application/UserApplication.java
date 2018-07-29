@@ -26,8 +26,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+
+
 /**
- * Created by lionelm on 6/28/2017.
+ * this class provides the logic for the user related operation
+ * called by endpoints or another application that requires usage of user related methods
  */
 @Component
 public class UserApplication {
@@ -43,7 +46,7 @@ private PurchaseApplication purchaseApplication;
 
 private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-
+//  as final part of the leasing process decreases a credit from user to pay for the lease.
     public boolean decreaseUserCredits(int userID, boolean needToLockLine){
         String whereStatement = "id=" + userID +" && credits > 0";
         String setStatement = "credits = credits - 1";
@@ -53,6 +56,7 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         }
         return LocksService.setLockedRow(rowBlockerData);
     }
+//    creates a record of the operation
 
     public void createRantedMovieLog (int userId, int movieId){
         Calendar cal = Calendar.getInstance();
@@ -71,7 +75,7 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dbManager.updateQuery(query);
     }
 
-
+// validates the parameters and calls  UserDataManager.addUser
     public SimpleResponse addUser(String userName, String password, String firstName, String lastName, String paymentToken, String roleStr, String creditsStr) throws AlreadyExistentUserNameException {
         int role=USER;
         try{
@@ -119,6 +123,7 @@ private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return new SimpleResponse().setResult(DbDataEnums.result.SUCCESS);
     }
 
+//    validates the parameters and calls  UserDataManager.editUser
     public SimpleResponse editUser(ActiveUser activeUser, String userIdStr, String userName, String password, String firstName, String lastName, String paymentToken, String roleStr, String creditsStr) {
         int userId=-1;
         try{

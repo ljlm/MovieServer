@@ -3,9 +3,7 @@ package com.movie.tools.constants;
 import static com.movie.tools.constants.DBConstants.SELECT_ALL_FROM_;
 import static com.movie.tools.constants.DBConstants._WHERE_;
 
-/**
- * Created by lionelm on 6/28/2017.
- */
+
 public class MoviesDBConstants {
     public static final String MOVIES =" movieserverdb.movies ";
     public static final String CATEGORIES = " movieserverdb.categories";
