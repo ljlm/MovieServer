@@ -21,7 +21,6 @@ public class DataPopulator {
 
     @Autowired
     private DBManager dbManager;
-    private static final Logger logger = LoggerFactory.getLogger(DataPopulator.class);
     //    TODO CONSTANTS AND LOGS
     public void createTables(){
         dbManager.executeQuery("drop table if exists categories ");
@@ -88,24 +87,6 @@ public class DataPopulator {
         dbManager.executeQuery("CREATE TABLE rented_movies(id int NOT NULL AUTO_INCREMENT " +
                 ",user_id int  , movie_id int  " +
                 ", rented_date DATE , return_date DATE ,PRIMARY KEY (id))");
-
-
-//    					 inserQuery = "INSERT INTO rented_movies (user_id, movie_id, rented_date, return_date) VALUES (?, ?, ?, ?) ";
-//    					  types = new int[] { Types.INTEGER,Types.INTEGER, Types.DATE, Types.DATE };
-//    					   params = new Object[] { 1,1,"2014-01-28", "2014-01-28"};
-//    					  dbManager.insertQuery(inserQuery, params, types);
-
-        //end of rated movie table
-
-
-
-
-
-
-
-
-
-
 
         dbManager.executeQuery("drop table if exists movies");
         dbManager.executeQuery("CREATE TABLE movies(" +

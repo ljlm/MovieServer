@@ -1,8 +1,5 @@
 package com.movie.application;
 
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.movie.services.DataManager;
-import com.movie.services.ReviewsDataManager;
 import com.movie.tools.Calculator;
 import com.movie.tools.DbDataEnums;
 import com.movie.tools.SimpleResponse;

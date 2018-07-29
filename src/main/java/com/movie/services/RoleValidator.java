@@ -16,11 +16,4 @@ public class RoleValidator {
         }
 
     }
-
-    public static void validateUser (int role) throws Exception {
-        if ( USER < role){
-            throw new Exception("Unauthorized");
-        }
-    }
-
 }

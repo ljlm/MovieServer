@@ -1,6 +1,5 @@
 package com.movie.controllers;
 
-import java.security.InvalidParameterException;
 
 import com.movie.application.MovieApplication;
 import com.movie.application.PurchaseApplication;
@@ -24,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @EnableAutoConfiguration
 @RestController

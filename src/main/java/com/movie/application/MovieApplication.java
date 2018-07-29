@@ -38,7 +38,6 @@ public class MovieApplication {
     @Autowired
     private UserApplication userApplication;
 
-    private static final Logger logger = LoggerFactory.getLogger(MovieApplication.class);
 
     public List<Map<String,Object>> getMovieList (){
         return DataManager.getMovieDataService().getMovieList();
@@ -68,20 +67,21 @@ public class MovieApplication {
 
 
     public void calculateMoviesRating(){
-        logger.debug("Starting rating calculation and updating process");
+        System.out.println("Starting rating calculation and updating process");
         List<String> movieIds = getMovieIds ();
         try {
             for (String id : movieIds) {
                 List<Integer> movieRatings = getMovieRatings(Integer.parseInt(id));
                 String rating = Calculator.movieRatingCalculator(movieRatings);
                 System.out.println("rating of movieid=" + id + " is [" + rating + "]");
-                logger.debug("Rating of  movieid=" + id + " is [" + rating + "]");
+                System.out.println("Rating of  movieid=" + id + " is [" + rating + "]");
                 updateMovieRating(Integer.parseInt(id), rating,movieRatings.size());
             }
         }
         catch (Exception e){
             System.out.println("unable to update the ratings " + e);
         }
+        System.out.println("Calculation and updating process ended successfully");
     }
 
     public List<Integer> getMovieRatings(Integer movieID){
@@ -97,14 +97,6 @@ public class MovieApplication {
     public void updateMovieRating (Integer movieID, String rating, int raters) throws Exception {
         DataManager.getMovieDataService().updateMovieRating(movieID,rating,raters);
 
-    }
-
-    public boolean decreaseMovieCopiesCounter(int movieId){
-        return decreaseMovieCopiesCounter(movieId,true);
-    }
-
-    public boolean increaseMovieCopiesCounter(int movieId){
-        return increaseMovieCopiesCounter(movieId, true);
     }
 
 

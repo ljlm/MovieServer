@@ -1,16 +1,8 @@
 package com.movie.services;
 
-import com.movie.application.PurchaseApplication;
-import com.movie.dal.DBManager;
-import com.movie.tools.Calculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Service;
-
-import java.sql.Types;
-import java.util.*;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by lionelm on 2/25/2017.

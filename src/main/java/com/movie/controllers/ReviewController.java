@@ -43,11 +43,6 @@ public class ReviewController {
         return JsonTools.convertToJson(reviewApplication.getReviewsByMovieId(movieID));
     }
 
-    @RequestMapping(value = "/reviews/{userId}/{movieId}/{rating}", method = RequestMethod.PUT)
-    public void updateMovieRating (@PathVariable Integer movieId, @PathVariable Integer userId, @PathVariable Integer rating){
-//        reviewApplication.updateMovieRating(movieId,userId,rating);
-    }
-
     @RequestMapping(value = "/reviews/{movieId}", method = RequestMethod.POST)
     public String createMovieReview(@PathVariable Integer movieId, ServletRequest servletRequest){
         ActiveUser activeUserData = ActiveUser.getActiveUserData(servletRequest);

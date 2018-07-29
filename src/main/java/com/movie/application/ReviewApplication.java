@@ -22,8 +22,6 @@ import java.util.Map;
 @Component
 public class ReviewApplication {
 
-    @Autowired
-    private ReviewsDataManager reviewsDataManager;
 
     public List<Map<String,Object>> getReviews (){
        return DataManager.getReviewsDataManager().getReviews();
@@ -45,16 +43,16 @@ public class ReviewApplication {
 
 
     public SimpleResponse createUserReview (int userId, int movieId, int rating , String review){
-        reviewsDataManager.deleteMovieRating(userId,movieId);
-        return reviewsDataManager.createMovieRating( userId,  movieId,  rating ,  review);
+        DataManager.getReviewsDataManager().deleteMovieRating(userId,movieId);
+        return DataManager.getReviewsDataManager().createMovieRating( userId,  movieId,  rating ,  review);
     }
 
     public SimpleResponse deleteUserReview (int userId, int movieId){
-        return reviewsDataManager.deleteMovieRating(userId,movieId);
+        return DataManager.getReviewsDataManager().deleteMovieRating(userId,movieId);
     }
 
     public SimpleResponse deleteAllUserReview (int userId){
-        return reviewsDataManager.deleteMovieRating(userId);
+        return DataManager.getReviewsDataManager().deleteMovieRating(userId);
     }
 
 }
