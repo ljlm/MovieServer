@@ -1,5 +1,6 @@
 package com.movie.application;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,15 +26,15 @@ public class RantedMoviesApplication {
         List<Map<String, Object>> sortedMovieLogs = new ArrayList<>();
         List<Map<String, Object>> unsortedMovieLogs = DataManager.getRantedMoviesDataManager().getAllLeaseHistory();
         for (Map<String, Object> unsortedMovieLog : unsortedMovieLogs){
-            String returnDate = (String) unsortedMovieLog.get("return_date");
-            if (returnDate.equals("null")){
+            Date returnDate = (Date) unsortedMovieLog.get("return_date");
+            if (returnDate==null){
                 sortedMovieLogs.add(unsortedMovieLog);
             }
         }
 
         for (Map<String, Object> unsortedMovieLog : unsortedMovieLogs){
-            String returnDate = (String) unsortedMovieLog.get("return_date");
-            if (!returnDate.equals("null")){
+            Date returnDate = (Date) unsortedMovieLog.get("return_date");
+            if (returnDate!=null){
                 sortedMovieLogs.add(unsortedMovieLog);
             }
         }
