@@ -1,5 +1,6 @@
 package com.movie.application;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,23 @@ public class RantedMoviesApplication {
 
 
     public List<Map<String, Object>> getRantedMovieLogByUser(int userId){
-        return DataManager.getRantedMoviesDataManager().getUserLeaseHistory(userId);
+        List<Map<String, Object>> sortedMovieLogs = new ArrayList<>();
+        List<Map<String, Object>> unsortedMovieLogs = DataManager.getRantedMoviesDataManager().getUserLeaseHistory(userId);
+        for (Map<String, Object> unsortedMovieLog : unsortedMovieLogs){
+            String returnDate = (String) unsortedMovieLog.get("return_date");
+            if (returnDate.equals("null")){
+                sortedMovieLogs.add(unsortedMovieLog);
+            }
+        }
+
+        for (Map<String, Object> unsortedMovieLog : unsortedMovieLogs){
+            String returnDate = (String) unsortedMovieLog.get("return_date");
+            if (!returnDate.equals("null")){
+                sortedMovieLogs.add(unsortedMovieLog);
+            }
+        }
+
+        return sortedMovieLogs;
     }
 
     public List<Map<String, Object>> getAllRantedMovieLog(){
