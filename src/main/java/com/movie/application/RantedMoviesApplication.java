@@ -18,8 +18,12 @@ public class RantedMoviesApplication {
 
 
     public List<Map<String, Object>> getRantedMovieLogByUser(int userId){
+        return DataManager.getRantedMoviesDataManager().getUserLeaseHistory(userId);
+    }
+
+    public List<Map<String, Object>> getAllRantedMovieLog(){
         List<Map<String, Object>> sortedMovieLogs = new ArrayList<>();
-        List<Map<String, Object>> unsortedMovieLogs = DataManager.getRantedMoviesDataManager().getUserLeaseHistory(userId);
+        List<Map<String, Object>> unsortedMovieLogs = DataManager.getRantedMoviesDataManager().getAllLeaseHistory();
         for (Map<String, Object> unsortedMovieLog : unsortedMovieLogs){
             String returnDate = (String) unsortedMovieLog.get("return_date");
             if (returnDate.equals("null")){
@@ -35,10 +39,6 @@ public class RantedMoviesApplication {
         }
 
         return sortedMovieLogs;
-    }
-
-    public List<Map<String, Object>> getAllRantedMovieLog(){
-        return DataManager.getRantedMoviesDataManager().getAllLeaseHistory();
     }
 
     public boolean isMovieRantedByUser(int userId, int movieID){
